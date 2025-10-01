@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Poppins } from "next/font/google";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -23,12 +24,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {/* Main content */}
           <main className="flex-1 pt-20 md:pt-10 px-4 md:px-12 lg:px-12">
             {children}  
-            <Analytics />
           </main>
         </div>
 
         {/* Footer */}
         <Footer />
+
+        <Analytics /> {/* Vercel Analytics */} 
+        <SpeedInsights /> {/* Vercel Speed Insights */}
       </body>
     </html>
   );
