@@ -55,10 +55,23 @@ export default function AboutPage() {
       {/* Download Buttons Section */}
       <motion.section
         className="mb-12 flex flex-wrap gap-4"
-        variants={itemVariants} // Participates in stagger
+        variants={itemVariants}
+      >
+      <a
+        href="/portfolio.pdf"
+        download
+        onClick={() => window.umami?.("Download Portfolio")}
       >
         <AnimatedButton label="Download Portfolio" href="/portfolio.pdf" />
+      </a>
+
+      <a
+        href="/resume.pdf"
+        download
+        onClick={() => window.umami?.("Download Resume")}
+      >
         <AnimatedButton label="Download Resume" href="/resume.pdf" />
+      </a>
       </motion.section>
 
       {/* Separator */}
