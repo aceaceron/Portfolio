@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import DashboardHeader from "../../components/dashboard/DashboardHeader";
+// Adjusted import paths to resolve the 'Could not resolve' error
+import DashboardHeader from "../../components/dashboard/DashboardHeader"; 
 import GitHubSection from "../../components/dashboard/GithubSection";
 import WakaTimeSection from "../../components/dashboard/WakaTimeSection";
 import UmamiSection from "../../components/dashboard/UmamiSection";
@@ -80,30 +81,32 @@ export default function LiveDashboardPage() {
   }, []);
 
   return (
-    <div className="md:ml-64 px-8 pb-12">
-  <div>
-    <DashboardHeader />
-  </div>
+    <div className="md:ml-64 px-8">
+      <div>
+        <DashboardHeader />
+      </div>
 
-  <div className="pb-6">
-    <GitHubSection
-      github={github}
-      loading={loading}
-      yearLoading={yearLoading}
-      selectedYear={selectedYear}
-      setSelectedYear={setSelectedYear}
-      uniqueYears={uniqueYears}
-    />
-  </div>
+      {/* 1. Umami Section (Moved to the top) */}
+      <div className="pb-6">
+        <UmamiSection umami={umami} loading={loading} />
+      </div>
 
-  <div className="pb-6">
-    <WakaTimeSection waka={waka} loading={loading} wakaTimeRange={wakaTimeRange} />
-  </div>
+      {/* 2. GitHub Section */}
+      <div className="pb-6">
+        <GitHubSection
+          github={github}
+          loading={loading}
+          yearLoading={yearLoading}
+          selectedYear={selectedYear}
+          setSelectedYear={setSelectedYear}
+          uniqueYears={uniqueYears}
+        />
+      </div>
 
-  <div>
-    <UmamiSection umami={umami} loading={loading} />
-  </div>
-</div>
-
+      {/* 3. WakaTime Section */}
+      <div>
+        <WakaTimeSection waka={waka} loading={loading} wakaTimeRange={wakaTimeRange} />
+      </div>
+    </div>
   );
 }

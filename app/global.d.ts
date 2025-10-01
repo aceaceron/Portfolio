@@ -1,8 +1,8 @@
 // global.d.ts
+export {};
+
 declare global {
   interface Window {
-    umami: (eventName: string) => void;
+    umami?: (eventName: string, eventProps?: Record<string, any>) => void;
   }
 }
-
-export {};

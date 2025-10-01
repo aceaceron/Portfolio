@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
 
   images: {
-    domains: [], // optional, only needed if you fetch external images
+    domains: ['christianluisaceron.com'],
     formats: ['image/avif', 'image/webp'], // serve modern formats
   },
 };

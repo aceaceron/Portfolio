@@ -8,9 +8,10 @@ type AnimatedButtonProps = {
   label: string;
   href: string;
   className?: string;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => void; 
 };
 
-export default function AnimatedButton({ label, href, className }: AnimatedButtonProps) {
+export default function AnimatedButton({ label, href, className, onClick }: AnimatedButtonProps) {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
 
@@ -55,6 +56,8 @@ export default function AnimatedButton({ label, href, className }: AnimatedButto
       onMouseLeave={handleMouseLeave}
       whileHover={{ scale: 1.03 }}
       transition={smoothHoverTransition}
+      onClick={onClick} 
+      
     >
       
       {/* 1. Animated Circling Border Layer */}
