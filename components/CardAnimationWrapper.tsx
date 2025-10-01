@@ -24,19 +24,19 @@ const cardContainerVariants: Variants = {
   },
 };
 
-// ✅ Extend props to accept index
-type CardAnimationWrapperProps = React.ComponentProps<typeof motion.div> & {
+// ✅ Fully typed props including children
+type CardAnimationWrapperProps = React.PropsWithChildren<{
   index?: number;
-};
+}> & React.ComponentProps<typeof motion.div>;
 
 export default function CardAnimationWrapper({
   children,
-  className,
+  className = "",
   style,
-  index,
+  index = 0,
   ...props
 }: CardAnimationWrapperProps) {
-  const ref = React.useRef(null);
+  const ref = React.useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px 0px" });
 
   return (
@@ -46,14 +46,14 @@ export default function CardAnimationWrapper({
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
       transition={{
-        delay: index ? index * 0.15 : 0, // ✅ stagger delay based on index
+        delay: index * 0.15,
         type: "spring",
         stiffness: 120,
         damping: 20,
       }}
       className={className}
       style={style}
-      {...props} // allows motion.div props (onClick, onHoverStart, etc.)
+      {...props} // motion.div props
     >
       {children}
     </motion.div>

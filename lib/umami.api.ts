@@ -3,7 +3,10 @@ interface LoginResponse {
   token: string;
 }
 
-async function fetchUmamiToken(username: string, password: string): Promise<string> {
+async function fetchUmamiToken(
+  username: string,
+  password: string
+): Promise<string> {
   const res = await fetch(`${process.env.UMAMI_URL}/api/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -31,78 +34,107 @@ export async function fetchUmamiStats() {
 
   async function fetchMetric(endpoint: string) {
     const url = `${process.env.UMAMI_URL}/api/websites/${websiteId}${endpoint}?startAt=${oneYearAgo}&endAt=${tomorrow}&unit=month&timezone=Asia/Jakarta`;
-    const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+    const res = await fetch(url, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     if (!res.ok) {
       console.error(`Failed to fetch ${endpoint}:`, await res.text());
       return [];
     }
     const data = await res.json();
-    return Array.isArray(data) ? data.map((d: any) => ({ x: d.x, y: d.y })) : [];
+    return Array.isArray(data)
+      ? data.map((d: any) => ({ x: d.x, y: d.y }))
+      : [];
   }
 
   async function fetchTotals() {
     const url = `${process.env.UMAMI_URL}/api/websites/${websiteId}/stats?startAt=${oneYearAgo}&endAt=${tomorrow}&type=stats`;
-    const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+    const res = await fetch(url, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     if (!res.ok) {
       console.error("Failed to fetch totals:", await res.text());
       return {};
     }
     const data = await res.json();
-    
+
+    // Helper function to format seconds to "X hrs Y mins Z secs"
+    function formatAvgDuration(seconds: number): string {
+      const hrs = Math.floor(seconds / 3600);
+      const mins = Math.floor((seconds % 3600) / 60);
+      const secs = seconds % 60;
+      const parts: string[] = [];
+      if (hrs > 0) parts.push(`${hrs} hr${hrs > 1 ? "s" : ""}`);
+      if (mins > 0) parts.push(`${mins} min${mins > 1 ? "s" : ""}`);
+      if (secs > 0) parts.push(`${secs} sec${secs > 1 ? "s" : ""}`);
+      return parts.join(" ") || "0 sec";
+    }
+
     // Calculate average visit duration
-    const totalTime = data.totaltime?.value ?? 0;
+    const totalTime = data.totaltime?.value ?? 0; // in seconds
     const visits = data.visits?.value ?? 0;
-    const avgDuration = visits > 0 ? Math.round(totalTime / visits) : 0;
-    
+    const avgDurationSeconds = visits > 0 ? Math.round(totalTime / visits) : 0;
+
+    // Return data with formatted avgDuration
     return {
       pageviews: data.pageviews ?? { value: 0 },
       visitors: data.visitors ?? { value: 0 },
       visits: data.visits ?? { value: 0 },
       totaltime: data.totaltime ?? { value: 0 },
       bounces: data.bounces ?? { value: 0 },
-      avgDuration: { value: avgDuration }, // in seconds
+      avgDuration: {
+        value: avgDurationSeconds, // keep original seconds if needed
+        formatted: formatAvgDuration(avgDurationSeconds), // human-readable string with seconds
+      },
     };
   }
 
   async function fetchCountries() {
     const url = `${process.env.UMAMI_URL}/api/websites/${websiteId}/metrics?startAt=${oneYearAgo}&endAt=${tomorrow}&type=country`;
-    const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+    const res = await fetch(url, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     if (!res.ok) {
       console.error("Failed to fetch countries:", await res.text());
       return { value: 0, countries: [] };
     }
     const data = await res.json();
-    
+
     if (Array.isArray(data)) {
       const countries = data.map((country: any) => ({
         name: country.x,
-        count: country.y || 0
+        count: country.y || 0,
       }));
       return { value: countries.length, countries };
     }
-    
+
     return { value: 0, countries: [] };
   }
 
   async function fetchEvents() {
     const url = `${process.env.UMAMI_URL}/api/websites/${websiteId}/metrics?startAt=${oneYearAgo}&endAt=${tomorrow}&type=event`;
-    const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+    const res = await fetch(url, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     if (!res.ok) {
       console.error("Failed to fetch events:", await res.text());
       return { value: 0, events: [] };
     }
     const data = await res.json();
-    
+
     // The metrics endpoint returns an array of events with their counts
     if (Array.isArray(data)) {
       const events = data.map((event: any) => ({
         name: event.x,
-        count: event.y || 0
+        count: event.y || 0,
       }));
-      const totalEvents = events.reduce((sum: number, event: any) => sum + event.count, 0);
+      const totalEvents = events.reduce(
+        (sum: number, event: any) => sum + event.count,
+        0
+      );
       return { value: totalEvents, events };
     }
-    
+
     return { value: 0, events: [] };
   }
 
@@ -121,11 +153,11 @@ export async function fetchUmamiStats() {
       ...totals,
       countries: {
         value: countries.value,
-        breakdown: countries.countries
+        breakdown: countries.countries,
       },
       events: {
         value: events.value,
-        breakdown: events.events
+        breakdown: events.events,
       },
     },
   };

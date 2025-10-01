@@ -6,7 +6,8 @@ interface DashboardCardProps {
   value: any;
   description?: string;
   animate?: boolean;
-  className?: string; // ✅ allow external classes
+  className?: string;
+  icon?: React.ReactNode; 
 }
 
 export default function DashboardCard({

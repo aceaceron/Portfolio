@@ -1,25 +1,27 @@
-import { NextResponse } from "next/server";
-// Assuming fetchWakaTime is exported from this path
-import { fetchWakaTime } from "../../../lib/wakatime.api";
+// app/api/wakatime/route.ts 
+import { NextResponse } from 'next/server';
+import { fetchWakaTimeSafe, fetchWakaTimeAllTimeSinceToday } from '../../../lib/wakatime.api';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    // This single call now fetches both summary and daily data
-    const data = await fetchWakaTime("last_7_days");
+    const { searchParams } = new URL(request.url);
+    const range = searchParams.get('range') || 'last_7_days';
+    
+    // Use the safe wrapper that handles errors gracefully
+    const data = await fetchWakaTimeSafe(range as any);
     
     if (data.error) {
-      console.error("WakaTime API returned error:", data.error);
       return NextResponse.json(
-        { error: data.error, data: null },
-        { status: 500 }
+        { error: data.error }, 
+        { status: 400 }
       );
     }
     
     return NextResponse.json(data);
-  } catch (err) {
-    console.error("WakaTime API route error:", err);
+  } catch (error) {
+    console.error('WakaTime API route error:', error);
     return NextResponse.json(
-      { error: "Failed to fetch WakaTime stats", data: null },
+      { error: 'Failed to fetch WakaTime data' },
       { status: 500 }
     );
   }

@@ -12,10 +12,16 @@ function formatDate(date: Date) {
 
 function getLastSevenDayRange() {
   const today = new Date();
+  
+  // End date is yesterday
   const endDate = new Date(today);
-  const startDate = new Date(today);
-  startDate.setDate(today.getDate() - 6);
-  return `${formatDate(startDate)}-${formatDate(endDate)}`;
+  endDate.setDate(today.getDate() - 1);
+  
+  // Start date is 6 days before the end date
+  const startDate = new Date(endDate);
+  startDate.setDate(endDate.getDate() - 6);
+
+  return `${formatDate(startDate)} - ${formatDate(endDate)}`;
 }
 
 export default function LiveDashboardPage() {

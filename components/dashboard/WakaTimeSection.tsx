@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
-import { Clock } from "lucide-react";
-import { useState } from "react";
+import { Clock, Code2, Calendar, TrendingUp } from "lucide-react";
+import { useState, useEffect } from "react";
 import CardAnimationWrapper, { childVariants } from "../../components/CardAnimationWrapper";
 import DashboardCard from "../../components/dashboard/DashboardCard";
 import DashboardCardSkeleton from "../../components/dashboard/DashboardCardSkeleton";
@@ -28,6 +28,27 @@ interface WakaTimeSectionProps {
 export default function WakaTimeSection({ waka, loading, wakaTimeRange }: WakaTimeSectionProps) {
   const [editorsMousePosition, setEditorsMousePosition] = useState({ x: 0, y: 0 });
   const [languagesMousePosition, setLanguagesMousePosition] = useState({ x: 0, y: 0 });
+  const [categoriesMousePosition, setCategoriesMousePosition] = useState({ x: 0, y: 0 });
+  const [allTimeData, setAllTimeData] = useState<any>(null);
+  const [allTimeLoading, setAllTimeLoading] = useState(true);
+
+  // Fetch all-time data
+  useEffect(() => {
+    const fetchAllTime = async () => {
+      try {
+        const res = await fetch('/api/wakatime/all-time');
+        const data = await res.json();
+        if (!data.error) {
+          setAllTimeData(data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch all-time data:', error);
+      } finally {
+        setAllTimeLoading(false);
+      }
+    };
+    fetchAllTime();
+  }, []);
 
   const mergedEditorsData = (waka?.data?.editors || []).map((ed: any) => ({
     name: ed.name,
@@ -69,10 +90,7 @@ export default function WakaTimeSection({ waka, loading, wakaTimeRange }: WakaTi
             shadowBlur: 30,
             shadowColor: "rgba(0, 0, 0, 0.7)",
           },
-          label: {
-            fontSize: 16,
-            fontWeight: "bold",
-          },
+          // Removed label property to disable hover effect on label as requested
         },
         animationType: "scale",
         animationEasing: "elasticOut",
@@ -130,9 +148,9 @@ export default function WakaTimeSection({ waka, loading, wakaTimeRange }: WakaTi
     responsive: true,
     plugins: {
       legend: { display: false },
-    tooltip: {
-        enabled: false, 
-    },
+      tooltip: {
+        enabled: false,
+      },
       datalabels: {
         display: true,
         anchor: "end",
@@ -160,6 +178,59 @@ export default function WakaTimeSection({ waka, loading, wakaTimeRange }: WakaTi
     },
   };
 
+  // Categories chart data
+  const categoriesData = (waka?.data?.categories || []).map((cat: any) => ({
+    name: cat.name,
+    value: +(cat.total_seconds / 3600).toFixed(2),
+  }));
+
+  const categoriesChartOptions = {
+    tooltip: {
+      trigger: "item",
+      formatter: "{b}: {c}h ({d}%)",
+    },
+    legend: {
+      orient: "vertical",
+      left: "left",
+      textStyle: { color: "#fff" },
+    },
+    series: [
+      {
+        name: "Categories",
+        type: "pie",
+        radius: ["25%", "50%"], // same as editors
+        data: categoriesData,
+        label: {
+          color: "#fff",
+          fontWeight: "bold",
+          formatter: "{b}: {c}h",
+        },
+        itemStyle: {
+          borderRadius: 10, // match editors
+          borderColor: "#222",
+          borderWidth: 2,
+          shadowBlur: 20,
+          shadowColor: "rgba(0, 0, 0, 0.5)",
+        },
+        emphasis: {
+          scale: true,
+          scaleSize: 10,
+          itemStyle: {
+            shadowBlur: 30,
+            shadowColor: "rgba(0, 0, 0, 0.7)",
+          },
+          // Removed label property to disable hover effect on label as requested
+        },
+        animationType: "scale",
+        animationEasing: "elasticOut",
+        animationDelay(idx: number) {
+          return idx * 100;
+        },
+      },
+    ],
+    color: ["#4CAF50", "#2196F3", "#FF9800", "#E91E63", "#9C27B0"], // keep your category colors
+  };
+  
   const handleEditorsMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     setEditorsMousePosition({
@@ -176,27 +247,92 @@ export default function WakaTimeSection({ waka, loading, wakaTimeRange }: WakaTi
     });
   };
 
+  const handleCategoriesMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setCategoriesMousePosition({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
+
   return (
     <div>
       <CardAnimationWrapper index={9}>
         <motion.hr variants={childVariants} className="border-t-2 border-yellow-400 mb-4" />
       </CardAnimationWrapper>
+
       <CardAnimationWrapper index={10} className="flex items-center gap-2 mb-1">
         <Clock className="text-yellow-400 w-5 h-5" />
         <motion.h2 variants={childVariants} className="text-xl font-semibold">
           WakaTime
         </motion.h2>
       </CardAnimationWrapper>
+
       <CardAnimationWrapper index={11}>
         <motion.p variants={childVariants} className="text-gray-400 mb-2">
           Monitor coding activity and track productivity over time.
         </motion.p>
       </CardAnimationWrapper>
+
       <CardAnimationWrapper index={12}>
         <motion.p variants={childVariants} className="text-yellow-400 text-sm mb-2">
           {wakaTimeRange}
         </motion.p>
       </CardAnimationWrapper>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        {loading ? (
+          <>
+            <DashboardCardSkeleton />
+            <DashboardCardSkeleton />
+            <DashboardCardSkeleton />
+            <DashboardCardSkeleton />
+          </>
+        ) : (
+          <>
+            <CardAnimationWrapper index={13} className="h-full w-full">
+              <DashboardCard
+                title="Average Daily"
+                value={waka?.data?.human_readable_daily_average || "—"}
+                description="Coding time per day"
+                icon={<TrendingUp className="w-5 h-5 text-yellow-400" />}
+                className="h-full w-full"
+              />
+            </CardAnimationWrapper>
+
+            <CardAnimationWrapper index={14} className="h-full w-full">
+              <DashboardCard
+                title="Total Time"
+                value={waka?.data?.human_readable_total || "—"}
+                description={wakaTimeRange}
+                icon={<Code2 className="w-5 h-5 text-blue-400" />}
+                className="h-full w-full"
+              />
+            </CardAnimationWrapper>
+
+            <CardAnimationWrapper index={15} className="h-full w-full">
+              <DashboardCard
+                title="All-Time Total"
+                value={allTimeLoading ? "Loading..." : allTimeData?.data?.text || "—"}
+                description="Since started"
+                icon={<Calendar className="w-5 h-5 text-green-400" />}
+                className="h-full w-full"
+              />
+            </CardAnimationWrapper>
+
+            <CardAnimationWrapper index={16} className="h-full w-full">
+              <DashboardCard
+                title="Active Days"
+                value={waka?.data?.days_minus_holidays?.toString() || "—"}
+                description="Days with activity"
+                icon={<Clock className="w-5 h-5 text-purple-400" />}
+                className="h-full w-full"
+              />
+            </CardAnimationWrapper>
+          </>
+        )}
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
         {loading ? (
           <>
@@ -205,26 +341,10 @@ export default function WakaTimeSection({ waka, loading, wakaTimeRange }: WakaTi
           </>
         ) : (
           <>
-            <CardAnimationWrapper index={13} className="h-full w-full">
-              <DashboardCard
-                title="Average Daily Coding Time"
-                value={waka?.data?.human_readable_daily_average || "—"}
-                description=""
-                className="h-full w-full"
-              />
-            </CardAnimationWrapper>
-            <CardAnimationWrapper index={14} className="h-full w-full">
-              <DashboardCard
-                title="Total Coding Time"
-                value={waka?.data?.human_readable_total || "—"}
-                description="All coding editors"
-                className="h-full w-full"
-              />
-            </CardAnimationWrapper>
             {mergedEditorsData.length > 0 && (
               <CardAnimationWrapper
-                index={15}
-                className="col-span-1 md:col-span-2 w-full"
+                index={17}
+                className="w-full"
               >
                 <motion.div
                   variants={childVariants}
@@ -248,9 +368,38 @@ export default function WakaTimeSection({ waka, loading, wakaTimeRange }: WakaTi
                 </motion.div>
               </CardAnimationWrapper>
             )}
+
+            {categoriesData.length > 0 && (
+              <CardAnimationWrapper
+                index={18}
+                className="w-full"
+              >
+                <motion.div
+                  variants={childVariants}
+                  className="relative p-4 bg-gray-800 rounded-lg border border-gray-600 overflow-hidden group"
+                  onMouseMove={handleCategoriesMouseMove}
+                >
+                  <div
+                    className="pointer-events-none absolute -inset-px opacity-0 transition duration-300 group-hover:opacity-100"
+                    style={{
+                      background: `radial-gradient(600px circle at ${categoriesMousePosition.x}px ${categoriesMousePosition.y}px, rgba(255, 215, 0, 0.15), transparent 40%)`,
+                    }}
+                  />
+                  <div className="relative z-10">
+                    <h3 className="font-semibold text-lg mb-2">Categories</h3>
+                    <ReactECharts
+                      option={categoriesChartOptions}
+                      style={{ height: "400px" }}
+                      opts={{ renderer: "canvas" }}
+                    />
+                  </div>
+                </motion.div>
+              </CardAnimationWrapper>
+            )}
+
             {filteredLanguages.length > 0 && (
               <CardAnimationWrapper
-                index={16}
+                index={19}
                 className="col-span-1 md:col-span-2 w-full"
               >
                 <motion.div
