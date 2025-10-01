@@ -41,7 +41,7 @@ export default function CertificationsPage() {
   }, []);
 
   return (
-    <div className="md:ml-64 px-8 pb-12">
+    <div className="md:ml-64 px-8">
       <CertificationsHeader loading={loading} />
       <CertificationsToggle loading={loading} filter={filter} setFilter={setFilter} />
       {error && (
