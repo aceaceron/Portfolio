@@ -333,7 +333,13 @@ export default function UmamiSection({ umami, loading }: UmamiSectionProps) {
 
       <CardAnimationWrapper index={19}>
         <motion.p variants={childVariants} className="text-gray-400 mb-4">
-          Website analytics to see pageviews, visitors, and traffic trends.
+          Analytics to see pageviews, visitors of my website portfolio.
+        </motion.p>
+      </CardAnimationWrapper>
+
+      <CardAnimationWrapper index={19}>
+        <motion.p variants={childVariants} className="text-yellow-400 text-sm mb-2">
+          christianluisaceron.com
         </motion.p>
       </CardAnimationWrapper>
 
