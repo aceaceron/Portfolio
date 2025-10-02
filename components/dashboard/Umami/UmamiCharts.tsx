@@ -39,40 +39,38 @@ export default function UmamiCharts({ umami, loading }: Props) {
     ],
   };
 
-  const pieChartOptions = {
-    textStyle: { fontFamily: "Verdana" },
-    title: { text: "Visitors by Country", textStyle: { color: "white" } },
-    tooltip: {
-      trigger: "item",
-      formatter: (params: any) => {
-        const flag = getCountryFlag(params.name);
-        const fullName = getCountryName(params.name);
-        return `${flag} ${fullName}<br/>Visits: ${params.value} (${params.percent}%)`;
-      },
+const pieChartOptions = {
+  textStyle: { fontFamily: "Verdana" },
+  title: { text: "Visitors by Country", textStyle: { color: "white" } },
+  tooltip: {
+    trigger: "item",
+    formatter: (params: any) => {
+      const flag = getCountryFlag(params.name);
+      const fullName = getCountryName(params.name);
+      return `${flag} ${fullName}<br/>Visits: ${params.value} (${params.percent}%)`;
     },
-    legend: {
-      orient: "horizontal",
-      bottom: 0,
-      left: "center",
-      textStyle: { color: "white" },
-      formatter: (name: string) => `${getCountryFlag(name)} ${getCountryName(name)}`,
-      itemGap: 10,
-    },
-    series: [
-      {
-        name: "Countries",
-        type: "pie",
-        radius: ["20%", "35%"],
-        avoidLabelOverlap: false,
-        itemStyle: { borderRadius: 0, borderColor: "transparent", borderWidth: 0 },
-        label: { show: true, formatter: (params: any) => `${getCountryFlag(params.name)} ${getCountryName(params.name)} (${params.percent}%)`, color: "white", fontSize: 12 },
-        emphasis: { label: { show: true, fontSize: 16, fontWeight: "bold" } },
-        labelLine: { show: true },
-        data: countriesData.map((c: any) => ({ value: c.count, name: c.name })),
+  },
+  legend: { show: false }, // hide the legend
+  series: [
+    {
+      name: "Countries",
+      type: "pie",
+      radius: ["20%", "35%"],
+      avoidLabelOverlap: false,
+      itemStyle: { borderRadius: 0, borderColor: "transparent", borderWidth: 0 },
+      label: {
+        show: true,
+        formatter: (params: any) => `${getCountryFlag(params.name)} ${getCountryName(params.name)} (${params.percent}%)`,
+        color: "white",
+        fontSize: 12,
       },
-    ],
-    media: [{ query: { maxWidth: 768 }, option: { legend: { orient: "vertical", bottom: 0, left: "center", textStyle: { color: "white" } } } }],
-  };
+      emphasis: { label: { show: true, fontSize: 16, fontWeight: "bold" } },
+      labelLine: { show: true },
+      data: countriesData.map((c: any) => ({ value: c.count, name: c.name })),
+    },
+  ],
+};
+
 
   return (
     <>

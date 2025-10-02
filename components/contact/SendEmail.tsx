@@ -16,11 +16,11 @@ export default function SendEmailViaContactPage() {
     if (!formRef.current) return;
 
     emailjs
-      .sendForm(
-        "service_kx0u17g", // ✅ Service ID
-        "template_q9t90hj", // ✅ Template ID
-        formRef.current,
-        "bJKBHq_7YneDaBZjh" // ✅ Public Key
+    .sendForm(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!, // Service ID
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!, // Template ID
+        formRef.current!,
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY! // Public Key
       )
       .then(
         (result) => {

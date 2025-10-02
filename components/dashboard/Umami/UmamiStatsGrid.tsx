@@ -16,7 +16,7 @@ export default function UmamiStatsGrid({ umami, loading }: Props) {
     { title: "Visits", value: umami?.websiteStats?.visits?.value || 0, desc: "All visits" },
     { title: "Countries", value: umami?.websiteStats?.countries?.value || 1, desc: "Visitor countries" },
     { title: "Events", value: umami?.websiteStats?.events?.value || 0, desc: "Tracked events" },
-    { title: "Visit Duration", value: umami?.websiteStats?.avgDuration?.formatted || "0 min", desc: "Time spent in my portfolio" },
+    { title: "Average Visit Duration", value: umami?.websiteStats?.avgDuration?.formatted || "0 min", desc: "Average time spent" },
   ];
 
   return (

@@ -4,6 +4,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Poppins } from "next/font/google";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import RegisterSW from "../components/RegisterSW";
 import Script from "next/script";
 import type { Metadata, Viewport } from 'next';
 
@@ -34,6 +35,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className={`${poppins.className} bg-primary text-gray-100`}>
+        <RegisterSW />  {/* This registers SW immediately */}
+  
         {/* Main wrapper to limit max width and center layout */}
         <div className="max-w-[1400px] mx-auto flex min-h-screen">
           {/* Sidebar / Navbar */}
