@@ -32,7 +32,7 @@ export default function SkillsShowcase() {
     <div className="overflow-hidden">
       <motion.div
         ref={rowRef}
-        className="flex gap-6 sm:gap-8"
+        className="flex gap-6 sm:gap-12"
         animate={{ x: direction === "left" ? [-rowWidth, 0] : [0, -rowWidth] }}
         transition={{
           repeat: Infinity,
@@ -46,16 +46,14 @@ export default function SkillsShowcase() {
           return (
             <div
               key={`${skill.name}-${index}`}
-              className="flex flex-col items-center justify-center min-w-[70px] sm:min-w-[80px]"
+              className="flex flex-col items-center justify-center min-w-[80px] sm:min-w-[100px]"
             >
               <div
-                className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-white ${skill.bgColor}`}
+                className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center text-white ${skill.bgColor}`}
               >
-                <Icon size={20} className="sm:w-6 sm:h-6" />
+                <Icon size={32} className="sm:w-8 sm:h-8" />
               </div>
-              <span className="mt-2 text-white text-xs font-medium text-center whitespace-nowrap">
-                {skill.name}
-              </span>
+              {/* Skill name removed */}
             </div>
           );
         })}

@@ -16,7 +16,7 @@ export default function Hero() {
         <div>
           <h1 className="text-2xl text-accent">Hi, I’m Christian Luis Aceron</h1>
           <p
-            className="mt-4 text-white text-justify"
+            className="mt-4 text-white text-left"
             style={{ textIndent: '2em' }}
           >
             I am an aspiring full-stack developer based in Labo, Camarines Norte, Philippines.

@@ -88,23 +88,18 @@ export async function fetchWakaTimeAllTimeSinceToday() {
 
   for (const url of possibleUrls) {
     try {
-      console.log(`Trying WakaTime endpoint: ${url}`);
       const res = await fetch(url, {
         headers: {
           Authorization: `Basic ${basicAuth}`,
         },
       });
 
-      console.log(`Response status: ${res.status}`);
-
       if (res.ok) {
         const json = await res.json();
-        console.log('Success! Response:', json);
         return json;
       }
 
       const text = await res.text();
-      console.log(`Failed with status ${res.status}:`, text);
     } catch (err) {
       console.error(`Error trying ${url}:`, err);
     }
@@ -226,7 +221,6 @@ export async function fetchWakaTimeAllTimeViaSummaries() {
   const today = new Date().toISOString().split('T')[0];
   const twoWeeksAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
   
-  console.log(`Fetching summaries from ${twoWeeksAgo} to ${today}`);
   return fetchWakaTimeSummaries(twoWeeksAgo, today);
 }
 

@@ -156,11 +156,10 @@ function Navbar() {
       >
         {/* Logo and Title (Small version) */}
         {/* Mobile Logo & Title */}
-        <motion.div
+          <motion.div
             layout
-            layoutId="logo-container"
             className="flex items-center gap-2 cursor-pointer"
-            onClick={() => (window.location.href = "/")} // Navigate to home on click
+            onClick={() => (window.location.href = "/")}
           >
             <motion.div
               layoutId="logo-circle"
@@ -182,12 +181,11 @@ function Navbar() {
             </motion.span>
           </motion.div>
         {/* Menu/Close Button */}
-        <motion.button
-          layout
-          onClick={() => setOpen((v) => !v)}
-          className="p-2 rounded transition"
-          style={{ position: "relative", zIndex: 120 }}
-        >
+          <motion.button
+            onClick={() => setOpen((v) => !v)}
+            className="p-2 rounded transition"
+            style={{ position: "relative", zIndex: 120 }}
+          >
           <AnimatePresence mode="popLayout" initial={false}>
             {open ? (
               <motion.div

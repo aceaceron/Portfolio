@@ -10,7 +10,14 @@ import {
   SiFramer, SiTypescript, SiNumpy  
 } from "react-icons/si";
 import { IconType } from "react-icons";
-
+import {
+  Camera,
+  PenTool,
+  Video,
+  FileText,
+  Mic,
+  Presentation,
+} from "lucide-react";
 export type Skill = {
   name: string;
   icon: IconType | (() => JSX.Element);
@@ -53,6 +60,14 @@ export const skillsData: Skill[] = [
   { name: "Large Language Model", icon: () => <span className="text-white font-bold text-lg select-none">LLM</span>, bgColor: "bg-purple-700" },
   { name: "Git", icon: SiGit, bgColor: "bg-orange-600" },
   { name: "GitHub", icon: SiGithub, bgColor: "bg-gray-800" },
+    // Non-IT skills
+  { name: "Video Editing", icon: Video, bgColor: "bg-purple-600" },
+  { name: "Graphic Design", icon: PenTool, bgColor: "bg-pink-600" },
+  { name: "Photography", icon: Camera, bgColor: "bg-blue-600" },
+  { name: "Creative Writing", icon: FileText, bgColor: "bg-green-600" },
+  { name: "Public Speaking", icon: Mic, bgColor: "bg-orange-600" },
+  { name: "Presentation Skills", icon: Presentation, bgColor: "bg-yellow-600" },
+
 ];
 
 // Utility function to get skill data by name

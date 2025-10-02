@@ -1,6 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
-import CardAnimationWrapper, { childVariants } from "../../components/CardAnimationWrapper";
+import CardAnimationWrapper, { childVariants } from "../CardAnimationWrapper";
 
 export default function DashboardHeader() {
   return (
