@@ -11,7 +11,7 @@ import {
 } from "react-icons/si";
 import { IconType } from "react-icons";
 
-type Skill = {
+export type Skill = {
   name: string;
   icon: IconType | (() => JSX.Element);
   bgColor: string;

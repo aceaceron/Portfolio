@@ -2,8 +2,8 @@
 import { useEffect, useState } from "react";
 import Hero from "../components/home/Hero";
 import ProjectCard from "../components/home/ProjectCard";
-import SkillsGrid from "../components/SkillsGrid";
 import CertificationCard from "../components/home/CertificationCard";
+import SkillsShowcase from "../components/home/SkillsShowcase";
 import { Folder, Code, Award } from "lucide-react";
 import { motion } from "framer-motion";
 import { supabase } from "../lib/supabase.client";
@@ -257,7 +257,7 @@ export default function Home() {
           These are the technical skills and technologies I am proficient in,
           ranging from front-end to back-end development.
         </p>
-        <SkillsGrid />
+        <SkillsShowcase />
         <hr className="mt-6 border-[#FFD700]" />
       </motion.section>
 
