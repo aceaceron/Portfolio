@@ -280,10 +280,9 @@ export default function WakaTimeSection({ waka, loading, wakaTimeRange }: WakaTi
         </motion.p>
       </CardAnimationWrapper>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
         {loading ? (
           <>
-            <DashboardCardSkeleton />
             <DashboardCardSkeleton />
             <DashboardCardSkeleton />
             <DashboardCardSkeleton />
@@ -312,20 +311,10 @@ export default function WakaTimeSection({ waka, loading, wakaTimeRange }: WakaTi
 
             <CardAnimationWrapper index={15} className="h-full w-full">
               <DashboardCard
-                title="All-Time Total"
+                title="Lifetime Coding Time"
                 value={allTimeLoading ? "Loading..." : allTimeData?.data?.text || "—"}
-                description="Since started"
+                description="Since joined WakatTime"
                 icon={<Calendar className="w-5 h-5 text-green-400" />}
-                className="h-full w-full"
-              />
-            </CardAnimationWrapper>
-
-            <CardAnimationWrapper index={16} className="h-full w-full">
-              <DashboardCard
-                title="Active Days"
-                value={waka?.data?.days_minus_holidays?.toString() || "—"}
-                description="Days with activity"
-                icon={<Clock className="w-5 h-5 text-purple-400" />}
                 className="h-full w-full"
               />
             </CardAnimationWrapper>

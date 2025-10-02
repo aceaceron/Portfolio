@@ -398,9 +398,9 @@ export default function UmamiSection({ umami, loading }: UmamiSectionProps) {
 
             <CardAnimationWrapper index={25}>
               <DashboardCard
-                title="Avg Visit Duration"
+                title="Visit Duration"
                 value={umami?.websiteStats?.avgDuration?.formatted || "0 min"}
-                description="Avg time per visit"
+                description="Time spent in my portfolio"
                 className="w-full h-full flex flex-col"
               />
             </CardAnimationWrapper>

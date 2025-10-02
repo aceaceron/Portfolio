@@ -134,18 +134,6 @@ export async function fetchWakaGoals() {
   return fetchFromWakaTime("goals");
 }
 
-// Example usage:
-async function example() {
-  // Method 1: Use all_time range (may have date range limits)
-  const allTimeStats = await fetchWakaTimeAllTime();
-  console.log("All-time stats:", allTimeStats.data?.human_readable_total);
-
-  // Method 2: Use all_time_since_today endpoint (RECOMMENDED - matches profile)
-  const allTimeSinceToday = await fetchWakaTimeAllTimeSinceToday();
-  console.log("All-time since today:", allTimeSinceToday.data?.text);
-  console.log("Total seconds:", allTimeSinceToday.data?.total_seconds);
-}
-
 // Quick test function
 export async function getMyTotalCodingTime() {
   const result = await fetchWakaTimeAllTimeSinceToday();
@@ -241,3 +229,4 @@ export async function fetchWakaTimeAllTimeViaSummaries() {
   console.log(`Fetching summaries from ${twoWeeksAgo} to ${today}`);
   return fetchWakaTimeSummaries(twoWeeksAgo, today);
 }
+
