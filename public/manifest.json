@@ -1,0 +1,37 @@
+{
+  "name": "Christian Luis Aceron | Portfolio",
+  "short_name": "christianluisaceron.com",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#030712",
+  "theme_color": "#FFD700",
+  "icons": [
+    { 
+      "src": "/icons/icon-192x192.png", 
+      "sizes": "192x192", 
+      "type": "image/jpg"
+    },
+    { 
+      "src": "/icons/icon-512x512.png", 
+      "sizes": "1024x1024", 
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/desktop-home.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Portfolio Homepage - Desktop"
+    },
+    {
+      "src": "/screenshots/mobile-home.jpg",
+      "sizes": "1080x1920",
+      "type": "image/jpg",
+      "label": "Portfolio Homepage - Mobile"
+    }
+  ],
+  "description": "Full-Stack Developer Portfolio of Christian Luis Aceron showcasing projects and skills",
+  "categories": ["business", "productivity", "information technology", "web development"]
+}

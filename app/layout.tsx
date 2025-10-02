@@ -5,12 +5,21 @@ import { Poppins } from "next/font/google";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Script from "next/script";
+import type { Metadata, Viewport } from 'next';
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["400","600","700"] });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Christian Luis Aceron | Portfolio",
   description: "Full-Stack Developer Portfolio of Christian Luis Aceron",
+  icons: [
+    { rel: 'icon', url: '/favicon.ico' },
+  ],
+  manifest: '/manifest.json',  // ✅ Correct way to add manifest
+};
+
+export const viewport: Viewport = {
+  themeColor: '#FFD700',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

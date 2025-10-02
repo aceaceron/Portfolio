@@ -198,8 +198,7 @@ export default function UmamiSection({ umami, loading }: UmamiSectionProps) {
     textStyle: { fontFamily: "Verdana" },
     title: {
       text: chartTitle,
-      left: "center",
-      textStyle: { color: "#FFD700" },
+      textStyle: { color: "white" },
     },
     tooltip: { trigger: "axis" },
     legend: {
@@ -244,8 +243,7 @@ export default function UmamiSection({ umami, loading }: UmamiSectionProps) {
     textStyle: { fontFamily: "Verdana" },
     title: {
       text: "Visitors by Country",
-      left: "center",
-      textStyle: { color: "#FFD700" },
+      textStyle: { color: "white" },
     },
     tooltip: {
       trigger: "item",

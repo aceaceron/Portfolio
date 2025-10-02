@@ -119,9 +119,9 @@ export default function SkillsGrid() {
             >
               <Icon size={32} />
             </motion.div>
-            <motion.span className="mt-2 text-white text-xs font-semibold text-center opacity-0 group-hover:opacity-100 transition-opacity">
-              {skill.name}
-            </motion.span>
+              <motion.span className="mt-2 text-white text-xs font-semibold text-center opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                {skill.name}
+              </motion.span>
           </motion.div>
         );
       })}

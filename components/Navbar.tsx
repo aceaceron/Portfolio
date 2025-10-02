@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
+import { usePathname } from "next/navigation";
 import { Menu, X, Home, User, Folder, Code, Award, LayoutDashboard, Mail } from "lucide-react";
 
 const navLinks = [
@@ -13,34 +14,37 @@ const navLinks = [
   { name: "Contact", href: "/contact", icon: Mail },
 ];
 
-// Nav link component with grouped hover animation
+// Nav link component with grouped hover animation + active highlight
 function NavLink({ link }: { link: typeof navLinks[0] }) {
+  const pathname = usePathname(); // get current path
   const Icon = link.icon;
-  // Use state to track the hover status of the entire NavLink component
   const [isHovered, setIsHovered] = useState(false);
+
+  // Determine if this link is active
+  const isActive = pathname === link.href;
+
   return (
     <motion.div
       className="flex items-center gap-2 cursor-pointer"
-      // Add event listeners to update the hover state
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       whileHover={{ scale: 1.05 }}
-      // Animate the color based on the hover state
-      animate={{ color: isHovered ? "#FFD700" : "#FFFFFF" }}
-      transition={{ type: "spring" as const, stiffness: 200 }}
+      animate={{
+        color: isActive ? "#FFD700" : isHovered ? "#FFD700" : "#FFFFFF",
+      }}
+      transition={{ type: "spring", stiffness: 200 }}
     >
       <motion.div
         className="flex-shrink-0"
-        // Animate the rotation based on the parent's hover state
         animate={{ rotate: isHovered ? -12 : 0 }}
-        transition={{ type: "spring" as const, stiffness: 200 }}
+        transition={{ type: "spring", stiffness: 200 }}
       >
         <Icon size={20} />
       </motion.div>
       <motion.span
         animate={{ scale: 1 }}
         whileHover={{ scale: 1.05 }}
-        className="transition-transform"
+        className="transition-transform font-semibold"
       >
         {link.name}
       </motion.span>
@@ -84,7 +88,9 @@ const firstTimeVariants: Variants = {
   }),
 };
 
-export default function Navbar() {
+// REMOVED THE DUPLICATE EXPORT DEFAULT FROM HERE
+
+function Navbar() {
   const [open, setOpen] = useState(false);
   const [isFirstTime, setIsFirstTime] = useState(false);
 
@@ -271,3 +277,5 @@ export default function Navbar() {
     </>
   );
 }
+
+export default Navbar;

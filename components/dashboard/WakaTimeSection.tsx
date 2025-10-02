@@ -302,7 +302,7 @@ export default function WakaTimeSection({ waka, loading, wakaTimeRange }: WakaTi
 
             <CardAnimationWrapper index={14} className="h-full w-full">
               <DashboardCard
-                title="Total Time"
+                title="Total Coding Time"
                 value={waka?.data?.human_readable_total || "—"}
                 description={wakaTimeRange}
                 icon={<Code2 className="w-5 h-5 text-blue-400" />}

@@ -15,7 +15,10 @@ export default function Hero() {
         {/* Right Text */}
         <div>
           <h1 className="text-2xl text-accent">Hi, I’m Christian Luis Aceron</h1>
-          <p className="mt-4 text-white">
+          <p
+            className="mt-4 text-white text-justify"
+            style={{ textIndent: '2em' }}
+          >
             I am an aspiring full-stack developer based in Labo, Camarines Norte, Philippines.
             During college, I built systems using vanilla HTML, CSS, and JavaScript, focusing
             on creating functional and responsive user interfaces. I designed intuitive UI/UX
