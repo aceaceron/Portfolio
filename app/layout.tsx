@@ -7,6 +7,7 @@ import Footer from "../components/Footer";
 import RegisterSW from "../components/RegisterSW";
 import Script from "next/script";
 import type { Metadata, Viewport } from 'next';
+import SessionWrapper from "../components/SessionWrapper";
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["400","600","700"] });
 
@@ -35,24 +36,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className={`${poppins.className} bg-primary text-gray-100`}>
-        <RegisterSW />  {/* This registers SW immediately */}
-  
-        {/* Main wrapper to limit max width and center layout */}
-        <div className="max-w-[1400px] mx-auto flex min-h-screen">
-          {/* Sidebar / Navbar */}
-          <Navbar />
+        {/* WRAP THE ENTIRE APPLICATION WITH SessionWrapper */}
+        <SessionWrapper> 
+          <RegisterSW />  {/* This registers SW immediately */}
+    
+          {/* Main wrapper to limit max width and center layout */}
+          <div className="max-w-[1400px] mx-auto flex min-h-screen">
+            {/* Sidebar / Navbar */}
+            <Navbar />
 
-          {/* Main content */}
-          <main className="flex-1 pt-20 md:pt-10 px-4 md:px-12 lg:px-12">
-            {children}
-          </main>
-        </div>
+            {/* Main content */}
+            <main className="flex-1 pt-20 md:pt-10 px-4 md:px-12 lg:px-12">
+              {children}
+            </main>
+          </div>
 
-        {/* Footer */}
-        <Footer />
+          {/* Footer */}
+          <Footer />
 
-        <Analytics /> {/* Vercel Analytics */} 
-        <SpeedInsights /> {/* Vercel Speed Insights */}
+          <Analytics /> {/* Vercel Analytics */} 
+          <SpeedInsights /> {/* Vercel Speed Insights */}
+        </SessionWrapper> {/* <-- Close the wrapper */}
       </body>
     </html>
   );

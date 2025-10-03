@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { Menu, X, Home, User, Folder, Code, Award, LayoutDashboard, Mail } from "lucide-react";
+import { HiOutlineChat } from "react-icons/hi"; 
 
 const navLinks = [
   { name: "Home", href: "/", icon: Home },
@@ -12,6 +13,7 @@ const navLinks = [
   { name: "Certifications", href: "/certifications", icon: Award },
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Contact", href: "/contact", icon: Mail },
+  { name: "Chat Hub", href: "/chat", icon: HiOutlineChat, },
 ];
 
 // Nav link component with grouped hover animation + active highlight

@@ -15,6 +15,7 @@ const defaultCTAs = [
   { label: "Check my certificates", href: "/certifications" },
   { label: "Get to know about me", href: "/about" },
   { label: "View dashboard", href: "/dashboard" },
+  { label: "Feel free to drop your opinion here", href: "/chat" },
 ];
 
 export default function Footer({ ctas }: FooterProps) {

@@ -7,7 +7,7 @@ import { mainContacts, specialContacts } from "../../components/contact/ContactD
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen p-4 pl-12 pr-12 pt-6 md:ml-64 text-white font-inter">
+    <div className="md:ml-64 px-8">
       <div className="max-w-7xl mx-auto">
         <ContactHeader />
         <ContactGrid contacts={mainContacts} />

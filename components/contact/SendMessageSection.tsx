@@ -1,10 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { Mail } from "lucide-react";
 import GlowingCardWrapper from "./GlowingCardWrapper";
-import SendEmailViaContactPage from "./SendEmail";
+import SendEmailViaContactPage from "./SendEmailForm";
 
 export default function SendMessageSection() {
+  const [mailStatus, setMailStatus] = useState<"success" | "error" | null>(null);
+  const [hasErrors, setHasErrors] = useState(false); 
   return (
     <section>
       <div className="flex items-center gap-2 mb-2">
@@ -16,8 +19,8 @@ export default function SendMessageSection() {
       <p className="text-gray-400 text-lg sm:text-xl mb-6">
         Got a question, collaboration idea, or just want to say hi? Fill out the form below and I’ll get back to you.
       </p>
-      <GlowingCardWrapper className="p-8">
-        <SendEmailViaContactPage />
+      <GlowingCardWrapper status={hasErrors ? "error" : mailStatus} className="p-8">
+        <SendEmailViaContactPage setMailStatus={setMailStatus} setHasErrors={setHasErrors} />
       </GlowingCardWrapper>
     </section>
   );

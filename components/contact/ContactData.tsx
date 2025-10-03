@@ -12,7 +12,7 @@ export interface ContactItem {
 
 export const contactData: ContactItem[] = [
   {
-    name: "Gmail Address",
+    name: "Email Address",
     Icon: Mail,
     description: "Send me a direct email for professional or personal inquiries.",
     link: "mailto:mail.christianluisaceron@yahoo.com",
