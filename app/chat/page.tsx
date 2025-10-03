@@ -174,7 +174,7 @@ export default function ChatPage() {
   }, [messages]);
 
   return (
-    <div className="min-h-screen p-4 pl-6 pr-6 md:ml-64 text-white font-inter">
+    <div className="min-h-screen pl-6 pr-6 md:ml-64 text-white font-inter">
       {/* Header */}
       <ChatHeader customSession={customSession} />
 

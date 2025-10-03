@@ -1,4 +1,6 @@
-import React, { useEffect, useRef } from "react";
+"use client";
+
+import React, { useEffect, useRef, useState } from "react";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 
 type ContributionDay = {
@@ -113,9 +115,31 @@ export default function ContributionCalendar({
   const blockMargin = 5;
   const weekWidth = blockSize + blockMargin;
 
+  // Animation state
+  const [animatedBlocks, setAnimatedBlocks] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    const allBlocks: string[] = [];
+    filteredWeeks.forEach((week) =>
+      week.contributionDays.forEach((day) => allBlocks.push(day.date))
+    );
+
+    // Shuffle array randomly
+    for (let i = allBlocks.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [allBlocks[i], allBlocks[j]] = [allBlocks[j], allBlocks[i]];
+    }
+
+    // Animate blocks sequentially
+    allBlocks.forEach((id, index) => {
+      setTimeout(() => {
+        setAnimatedBlocks((prev) => new Set(prev).add(id));
+      }, index * 1); 
+    });
+  }, [filteredWeeks]);
+
   return (
     <div>
-      {/* Scrollable Contribution Calendar */}
       <div
         ref={calendarRef}
         className="calendar-scroll overflow-x-auto scroll-smooth p-2"
@@ -136,10 +160,7 @@ export default function ContributionCalendar({
           }}
         >
           {months.map((month, index) => {
-            // Skip the first duplicate month
-            if (index === 0 && months[0].name === months[1]?.name) {
-              return null;
-            }
+            if (index === 0 && months[0].name === months[1]?.name) return null;
 
             const firstDayDate = new Date(month.firstDay);
             let weekIndex = 0;
@@ -230,13 +251,13 @@ export default function ContributionCalendar({
               >
                 {week.contributionDays.map((day) => {
                   const level = getLevel(day.contributionCount);
+                  const isAnimated = animatedBlocks.has(day.date);
+
                   return (
                     <div
                       key={day.date}
                       data-tooltip-id={tooltipId}
-                      data-tooltip-content={`${
-                        day.contributionCount
-                      } contribution${
+                      data-tooltip-content={`${day.contributionCount} contribution${
                         day.contributionCount !== 1 ? "s" : ""
                       } on ${new Date(day.date).toDateString()}`}
                       style={{
@@ -245,6 +266,9 @@ export default function ContributionCalendar({
                         backgroundColor: LEVEL_COLORS[level],
                         borderRadius: 3,
                         cursor: "pointer",
+                        transform: isAnimated ? "translateY(0)" : "translateY(-20px)",
+                        opacity: isAnimated ? 1 : 0,
+                        transition: "all 0.3s ease",
                       }}
                     />
                   );

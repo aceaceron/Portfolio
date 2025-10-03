@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { FaCode, FaTrash } from "react-icons/fa";
 
@@ -12,6 +13,18 @@ interface Props {
 export default function MessageBubble({ msg, isOwnMessage, customSession, onDelete }: Props) {
   const userImage = msg.users?.image;
   const isAuthor = msg.users?.is_author === true;
+
+  const [expanded, setExpanded] = useState(false);
+  const MAX_LENGTH = 150;
+
+  const handleDelete = () => {
+    if (confirm("Are you sure you want to delete this message?")) {
+      onDelete(msg.id);
+    }
+  };
+
+  const isLongMessage = msg.text.length > MAX_LENGTH;
+  const displayedText = expanded || !isLongMessage ? msg.text : msg.text.slice(0, MAX_LENGTH) + "...";
 
   return (
     <motion.div
@@ -45,16 +58,16 @@ export default function MessageBubble({ msg, isOwnMessage, customSession, onDele
         className={`relative p-4 pr-4 rounded-xl max-w-xs break-words shadow-md transition-all
           ${isOwnMessage
             ? "bg-yellow-500/70 text-black hover:shadow-[0_0_15px_4px_rgba(255,215,0,0.3)] ml-auto"
-            : "bg-gray-700/50 text-white hover:shadow-[0_0_10px_4px_rgba(255,215,0,0.15)] mr-auto"}
-        `}
+            : "bg-gray-700/50 text-white hover:shadow-[0_0_10px_4px_rgba(255,215,0,0.15)] mr-auto"
+          }`}
       >
         {/* Pointer */}
         <div
           className={`absolute top-3 w-0 h-0 border-t-8 border-b-8 
             ${isOwnMessage
               ? "right-[-7px] border-l-8 border-l-yellow-500/70 border-t-transparent border-b-transparent"
-              : "left-[-7px] border-r-8 border-r-gray-700/50 border-t-transparent border-b-transparent"}
-          `}
+              : "left-[-7px] border-r-8 border-r-gray-700/50 border-t-transparent border-b-transparent"
+          }`}
         ></div>
 
         <div className="flex items-center gap-2 mb-1">
@@ -66,7 +79,17 @@ export default function MessageBubble({ msg, isOwnMessage, customSession, onDele
           )}
         </div>
 
-        <p>{msg.text}</p>
+        <p>{displayedText}</p>
+
+        {/* Expand/Collapse button */}
+        {isLongMessage && (
+          <button
+            onClick={() => setExpanded(!expanded)}
+            className="text-xs text-blue-400 hover:underline mt-1"
+          >
+            {expanded ? "Show less" : "Show more"}
+          </button>
+        )}
 
         <div className="flex items-center justify-between mt-1">
           <p className="text-xs opacity-60">
@@ -74,10 +97,10 @@ export default function MessageBubble({ msg, isOwnMessage, customSession, onDele
           </p>
           {customSession?.user?.isAuthor && (
             <button
-              onClick={() => onDelete(msg.id)}
-              className="text-white hover:text-red-600 ml-2"
+              onClick={handleDelete}
+              className="text-white hover:text-red-600"
             >
-              <FaTrash className="w-4 h-4" />
+              <FaTrash className="h-4" />
             </button>
           )}
         </div>

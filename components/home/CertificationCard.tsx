@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 type Props = {
   title?: string;
   org?: string;
-  year?: string;             // formatted like "May 2025"
+  year?: string; // formatted like "May 2025"
   thumbnail?: string;
   pinned?: boolean;
   index: number;
@@ -50,7 +50,8 @@ export default function CertificationCard({
               alt={title + " certificate"}
               className="w-full h-full object-contain bg-white transition-transform duration-300 hover:scale-105"
               onError={(e) => {
-                (e.target as HTMLImageElement).src = "/placeholder-certificate.png";
+                (e.target as HTMLImageElement).src =
+                  "/placeholder-certificate.png";
               }}
             />
             {pinned && (
@@ -74,7 +75,9 @@ export default function CertificationCard({
             {credentialId && (
               <div className="mt-2">
                 <p className="text-xs text-gray-400">Credential ID:</p>
-                <p className="text-sm text-[#FFD700] font-mono break-all">{credentialId}</p>
+                <p className="text-sm text-[#FFD700] font-mono break-all">
+                  {credentialId}
+                </p>
               </div>
             )}
           </div>

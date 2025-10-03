@@ -21,17 +21,20 @@ export default function ChatHeader({ customSession }: Props) {
 
       {customSession ? (
         <div className="text-gray-400">
-          <p className="mb-2 flex items-center gap-2">
-            Logged in as {customSession.user?.name}
-            {customSession.user?.isAuthor && (
-              <span className="px-2 py-0.5 text-xs font-bold bg-gradient-to-r from-yellow-400 to-amber-600 text-black rounded-full flex items-center gap-1">
-                Author
-              </span>
-            )}
-          </p>
+          <p className="mb-2 flex flex-col gap-1">
+            Logged in as
+            <span className="flex items-center gap-2">
+                {customSession.user?.name}
+                {customSession.user?.isAuthor && (
+                <span className="px-2 py-0.5 text-xs font-bold bg-gradient-to-r from-yellow-400 to-amber-600 text-black rounded-full flex items-center gap-1">
+                    Author
+                </span>
+                )}
+            </span>
+            </p>
           <button
             onClick={() => signOut()}
-            className="w-full sm:w-auto px-4 py-2 bg-red-500 text-white font-semibold rounded-full hover:bg-red-600 transition-shadow shadow-md hover:shadow-lg"
+            className="w-sm:w-auto px-4 py-2 bg-red-500 text-white font-semibold rounded-full hover:bg-red-600 transition-shadow shadow-md hover:shadow-lg"
           >
             Log Out
           </button>

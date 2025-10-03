@@ -14,7 +14,7 @@ export default function ChatMessages({ messages, customSession, isLoading, onDel
   return (
     <div
       ref={containerRef}
-      className="overflow-y-auto p-4 rounded-xl bg-gray-800/50 shadow-lg space-y-3 h-[70vh] sm:h-[60vh] md:h-[50vh] lg:h-[75vh] xl:h-[70vh]"
+      className="overflow-y-auto p-4 rounded-xl bg-gray-800/50 shadow-lg space-y-3 h-[70vh] sm:h-[60vh] md:h-[50vh] lg:h-[75vh] xl:h-[70vh] "
     >
       {isLoading ? (
         <p className="text-gray-400 text-center">Loading messages...</p>
