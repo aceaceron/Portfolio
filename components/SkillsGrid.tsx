@@ -16,7 +16,6 @@ import {
   SiNextdotjs,
   SiTailwindcss,
   SiSupabase,
-  SiC,
   SiSqlite,
   SiMysql,
   SiFirebase,
@@ -33,6 +32,8 @@ import {
   SiFramer,
   SiTypescript,
   SiNumpy,
+  SiCanva,
+  SiCplusplus,
 } from "react-icons/si";
 import { IconType } from "react-icons";
 import {
@@ -44,12 +45,6 @@ import {
   Presentation,
 } from "lucide-react";
 import { FiFigma } from "react-icons/fi";
-// You might need to import a specific icon for Canva if available, 
-// but using a generic one for now.
-// For this example, I'll use PenTool, which is already imported. 
-// A specific Canva icon might be needed for perfect brand representation.
-// Since Canva doesn't have a specific free icon in these libraries, 
-// let's create a custom component with text, similar to VB.NET.
 
 export type Skill = {
   name: string;
@@ -66,7 +61,7 @@ export const skillsData: Skill[] = [
   { name: "PHP", icon: FaPhp, bgColor: "bg-indigo-600" },
   { name: "Python", icon: FaPython, bgColor: "bg-green-600" },
   { name: "Java", icon: FaJava, bgColor: "bg-red-700" },
-  { name: "C++", icon: SiC, bgColor: "bg-blue-700" },
+  { name: "C++", icon: SiCplusplus, bgColor: "bg-blue-700" },
   {
     name: "VB.NET",
     icon: () => (
@@ -131,12 +126,10 @@ export const skillsData: Skill[] = [
   // Non-IT skills
   { name: "Video Editing", icon: Video, bgColor: "bg-purple-600" },
   { name: "Graphic Design", icon: PenTool, bgColor: "bg-pink-600" },
-  { 
-    name: "Canva", 
-    icon: () => (
-        <span className="text-white font-bold text-lg select-none">C</span>
-    ),
-    bgColor: "bg-blue-500"
+  {
+    name: "Canva",
+    icon: SiCanva,
+    bgColor: "bg-blue-500",
   },
   { name: "Photography", icon: Camera, bgColor: "bg-blue-600" },
   { name: "Creative Writing", icon: FileText, bgColor: "bg-green-600" },

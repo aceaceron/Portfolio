@@ -1,14 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { BarChart } from "lucide-react";
+import { SiUmami } from "react-icons/si";
 import CardAnimationWrapper, { childVariants } from "../../CardAnimationWrapper";
 
 export default function UmamiHeader() {
   return (
     <>
       <CardAnimationWrapper index={18} className="flex items-center gap-2 mb-1">
-        <BarChart className="text-yellow-400 w-5 h-5" />
+        <SiUmami className="text-yellow-400 w-5 h-5" />
         <motion.h2 variants={childVariants} className="text-xl font-semibold">
           Umami
         </motion.h2>

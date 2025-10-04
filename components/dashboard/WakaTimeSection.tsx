@@ -1,6 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
-import { Clock } from "lucide-react";
+import { SiWakatime } from "react-icons/si";
 import { useState, useEffect, useMemo } from "react";
 import CardAnimationWrapper, { childVariants } from "../CardAnimationWrapper";
 import WakaTimeCards from "./WakaTime/WakaTimeCards";
@@ -69,7 +69,7 @@ export default function WakaTimeSection({ waka, loading, wakaTimeRange }: WakaTi
       </CardAnimationWrapper>
 
       <CardAnimationWrapper index={10} className="flex items-center gap-2 mb-1">
-        <Clock className="text-yellow-400 w-5 h-5" />
+        <SiWakatime className="text-yellow-400 w-5 h-5" />
         <motion.h2 variants={childVariants} className="text-xl font-semibold">
           WakaTime
         </motion.h2>
