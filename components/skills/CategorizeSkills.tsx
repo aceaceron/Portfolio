@@ -71,6 +71,7 @@ export const categorizeSkills = (skills: Skill[]) => ({
         "C++",
         "VB.NET",
         "React",
+        "Canva",
         "Next.js",
         "Tailwind",
         "Framer Motion",

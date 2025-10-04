@@ -44,7 +44,7 @@ export default function CertificationCard({
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
       >
         {thumbnail && (
-          <div className="relative w-full aspect-video">
+          <div className="relative w-full aspect-[4/3]">
             <img
               src={thumbnail}
               alt={title + " certificate"}

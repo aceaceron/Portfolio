@@ -146,13 +146,9 @@ export default function ProjectCard({
                           tech.bgColor || "bg-gray-600"
                         } flex items-center justify-center text-white`}
                       >
-                        {Icon ? (
-                          <Icon size={16} />
-                        ) : (
-                          <span className="text-[10px]">?</span>
-                        )}
+                        {Icon ? <Icon size={16} /> : <span className="text-[10px]">?</span>}
                       </div>
-                      <span className="mt-1 text-white text-[10px] font-semibold text-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <span className="mt-1 text-white text-[10px] font-semibold text-center opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                         {tech.name}
                       </span>
                     </motion.div>

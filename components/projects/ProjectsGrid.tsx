@@ -2,28 +2,11 @@ import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ProjectCard from "./ProjectCard";
 
-type Tech = {
-  name: string;
-  icon?: any;
-  bgColor?: string;
-};
-
-type Project = {
-  slug: string;
-  title: string;
-  brief?: string;
-  thumbnail?: string;
-  pinned?: boolean;
-  category?: string;
-  year?: number;
-  status?: string;
-  tags?: string[];
-  techStack?: Tech[];
-};
+import { Project } from "../../app/projects/ProjectsClientPage"; 
 
 type ProjectsGridProps = {
   projects: Project[];
-  showNoProjects: boolean;
+  showNoProjects?: boolean;
   onStatusClick: (status: string, e: React.MouseEvent) => void;
   onCategoryClick: (category: string, e: React.MouseEvent) => void;
   onTagOrTechClick: (value: string, e: React.MouseEvent) => void;
@@ -36,11 +19,26 @@ export default function ProjectsGrid({
   onCategoryClick,
   onTagOrTechClick,
 }: ProjectsGridProps) {
+  
+  const sortedProjects = React.useMemo(() => {
+    // We now always use the public sorting logic: pinned first, then by idx.
+    const projectsToDisplay = [...projects]; 
+
+    return projectsToDisplay.sort((a, b) => {
+      // Primary Sort: Pinned Status (TRUE comes before FALSE)
+      if (a.pinned !== b.pinned) {
+        return b.pinned ? 1 : -1;
+      }
+      // Secondary Sort: If pinned status is the same, sort by idx (ascending)
+      return a.idx - b.idx;
+    });
+  }, [projects]); 
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 md:col-span-2 gap-6">
       <AnimatePresence>
-        {projects.length > 0 ? (
-          projects.map((project) => (
+        {sortedProjects.length > 0 ? (
+          sortedProjects.map((project) => (
             <ProjectCard
               key={project.slug}
               project={project}
@@ -50,7 +48,6 @@ export default function ProjectsGrid({
             />
           ))
         ) : !showNoProjects ? (
-          // Skeleton loading
           <div className="col-span-1 md:col-span-2 flex justify-center flex-wrap gap-6 py-12">
             {Array.from({ length: 4 }).map((_, i) => (
               <motion.div
@@ -67,7 +64,6 @@ export default function ProjectsGrid({
             ))}
           </div>
         ) : (
-          // Show after delay
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

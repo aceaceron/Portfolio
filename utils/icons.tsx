@@ -1,3 +1,4 @@
+// All icon imports
 import {
   FaHtml5,
   FaCss3,
@@ -6,6 +7,9 @@ import {
   FaPhp,
   FaNodeJs,
   FaPython,
+  FaServer,
+  FaJava,
+  FaNpm,
 } from "react-icons/fa";
 import {
   SiNextdotjs,
@@ -18,8 +22,33 @@ import {
   SiExpress,
   SiDjango,
   SiFlask,
+  SiSqlite,
+  SiScikitlearn,
+  SiPandas,
+  SiChartdotjs,
+  SiLeaflet,
+  SiMqtt,
+  SiRaspberrypi,
+  SiFirebase,
+  SiGithub,
+  SiGit,
+  SiFramer,
+  SiNumpy,
+  SiCanva,
+  SiCplusplus,
+  SiArduino,
 } from "react-icons/si";
+import { FiFigma } from "react-icons/fi";
+import {
+  Camera,
+  PenTool,
+  Video,
+  FileText,
+  Mic,
+  Presentation,
+} from "lucide-react";
 
+// Export as a centralized map
 export const iconMap: Record<string, any> = {
   FaHtml5,
   FaCss3,
@@ -28,6 +57,9 @@ export const iconMap: Record<string, any> = {
   FaPhp,
   FaNodeJs,
   FaPython,
+  FaServer,
+  FaJava,
+  FaNpm,
   SiNextdotjs,
   SiTailwindcss,
   SiSupabase,
@@ -38,4 +70,26 @@ export const iconMap: Record<string, any> = {
   SiExpress,
   SiDjango,
   SiFlask,
+  SiSqlite,
+  SiScikitlearn,
+  SiPandas,
+  SiChartdotjs,
+  SiLeaflet,
+  SiMqtt,
+  SiRaspberrypi,
+  SiFirebase,
+  SiGithub,
+  SiGit,
+  SiFramer,
+  SiNumpy,
+  SiCanva,
+  SiCplusplus,
+  SiArduino,
+  FiFigma,
+  Camera,
+  PenTool,
+  Video,
+  FileText,
+  Mic,
+  Presentation,
 };

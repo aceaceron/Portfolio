@@ -5,6 +5,7 @@ import { skillsData } from "../../components/SkillsGrid";
 import GlowingCardWrapper from "../../components/GlowingCardWrapper";
 import { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { iconMap } from "../../utils/icons";
 
 export default function SkillsShowcase() {
   const router = useRouter();
@@ -53,7 +54,6 @@ export default function SkillsShowcase() {
               >
                 <Icon size={32} className="sm:w-8 sm:h-8" />
               </div>
-              {/* Skill name removed */}
             </div>
           );
         })}

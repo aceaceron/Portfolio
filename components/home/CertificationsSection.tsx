@@ -53,15 +53,8 @@ export default function CertificationsSection() {
             <CertificationCard
               key={cert.id || cert.slug}
               title={cert.title}
-              org={cert.org}
-              year={
-                cert.date_earned
-                  ? new Date(cert.date_earned).toLocaleDateString("en-US", {
-                      month: "long",
-                      year: "numeric",
-                    })
-                  : ""
-              }
+              org={cert.org}   
+              year={cert.date_validity}
               thumbnail={cert.thumbnail}
               pinned={cert.pinned}
               index={index}

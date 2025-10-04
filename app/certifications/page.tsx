@@ -20,7 +20,6 @@ export default function CertificationsPage() {
         const { data, error: fetchError } = await supabase
           .from("certifications")
           .select("*")
-          .order("date_earned", { ascending: false });
 
         if (fetchError) {
           console.error("Error fetching certifications:", fetchError);

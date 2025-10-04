@@ -38,7 +38,6 @@ export default function ProjectTechStack({
               style={{ width: "44px" }}
               whileHover={{ scale: 1.1 }}
               transition={{ stiffness: 300, damping: 20 }}
-              onClick={() => onTechClick(tech.name)}
             >
               <div
                 className={`w-9 h-9 rounded-full border-2 border-[#FFD700] ${
@@ -51,7 +50,7 @@ export default function ProjectTechStack({
                   <span className="text-[10px]">?</span>
                 )}
               </div>
-              <span className="mt-1 text-white text-[10px] font-semibold text-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <span className="mt-1 text-white text-[10px] font-semibold text-center opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                 {tech.name}
               </span>
             </motion.div>

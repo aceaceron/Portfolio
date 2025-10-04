@@ -12,13 +12,9 @@ import ProjectGallery from "../../../components/projects/ProjectGallery";
 import RelatedProjects from "../../../components/projects/RelatedProjects";
 import ProjectDetailSkeleton from "../../../components/projects/ProjectDetailSkeleton";
 import ProjectErrorState from "../../../components/projects/ProjectErrorState";
-import { FaHtml5, FaCss3, FaJs, FaReact, FaPhp } from "react-icons/fa";
-import {
-  SiNextdotjs,
-  SiTailwindcss,
-  SiSupabase,
-  SiMysql,
-} from "react-icons/si";
+
+// import all icons from your centralized icons file
+import { iconMap } from "../../../utils/icons";
 
 type Tech = {
   name: string;
@@ -26,14 +22,22 @@ type Tech = {
   bgColor?: string;
 };
 
+type FeaturesType = Record<string, string[]>;
+
+type ProjectDescriptionType = {
+  introduction?: string;
+  objectives?: string[];
+  features?: FeaturesType;
+  challenges?: string[];
+  results_benefits?: string;
+  tech_stack_description?: Record<string, string[]>;
+};
+
 type Project = {
   slug: string;
   title: string;
   brief?: string;
-  description?: {
-    introduction?: string;
-    objectives?: string[];
-  };
+  description?: ProjectDescriptionType;
   tags?: string[];
   techStack?: Tech[];
   github?: string;
@@ -49,17 +53,6 @@ type ProjectDetailClientProps = {
   slug: string;
 };
 
-const iconMap: Record<string, any> = {
-  FaHtml5,
-  FaCss3,
-  FaJs,
-  FaReact,
-  FaPhp,
-  SiNextdotjs,
-  SiTailwindcss,
-  SiSupabase,
-  SiMysql,
-};
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -91,28 +84,40 @@ export default function ProjectDetailClient({
         }
 
         if (data) {
-          let techStack: Tech[] = [];
           let tags: string[] = [];
-          let description: { introduction?: string; objectives?: string[] } =
-            {};
+          let description: ProjectDescriptionType = {};
           let gallery: string[] = [];
+          let techStack: Tech[] = [];
 
-          if (Array.isArray(data.techstack)) {
-            techStack = data.techstack.map((t: any) => ({
-              ...t,
-              icon: iconMap[t.icon as string] || undefined,
-            }));
+          if (typeof data.description === "object" && data.description !== null) {
+            description = {
+              ...data.description,
+              features: data.description.features as FeaturesType,
+            };
+          }
+
+          if (data.tech_stack_description && typeof data.tech_stack_description === "object") {
+            description.tech_stack_description = data.tech_stack_description;
+          }
+
+          if (data.techstack) {
+            try {
+              const parsed =
+                typeof data.techstack === "string" ? JSON.parse(data.techstack) : data.techstack;
+              if (Array.isArray(parsed)) {
+                techStack = parsed.map((t: any) => ({
+                  name: t.name,
+                  bgColor: t.bgColor,
+                  icon: iconMap[t.icon] || undefined,
+                }));
+              }
+            } catch (e) {
+              console.warn("Techstack parse error for project:", data.slug, e);
+            }
           }
 
           if (Array.isArray(data.tags)) {
             tags = data.tags.map((tag: string) => tag.trim());
-          }
-
-          if (
-            typeof data.description === "object" &&
-            data.description !== null
-          ) {
-            description = data.description;
           }
 
           if (Array.isArray(data.gallery)) {
@@ -176,21 +181,15 @@ export default function ProjectDetailClient({
 
   const handleStatusClick = (status: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    router.push(
-      `/projects?status=${encodeURIComponent(status)}&showFilters=true`
-    );
+    router.push(`/projects?status=${encodeURIComponent(status)}&showFilters=true`);
   };
 
   const handleCategoryClick = (category: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    router.push(
-      `/projects?category=${encodeURIComponent(category)}&showFilters=true`
-    );
+    router.push(`/projects?category=${encodeURIComponent(category)}&showFilters=true`);
   };
 
-  if (loading) {
-    return <ProjectDetailSkeleton />;
-  }
+  if (loading) return <ProjectDetailSkeleton />;
 
   if (error || !project) {
     return (
@@ -235,6 +234,10 @@ export default function ProjectDetailClient({
       <ProjectDescription
         introduction={project.description?.introduction}
         objectives={project.description?.objectives}
+        features={project.description?.features}
+        challenges={project.description?.challenges}
+        results_benefits={project.description?.results_benefits}
+        tech_stack_description={project.description?.tech_stack_description}
         itemVariants={itemVariants}
       />
 

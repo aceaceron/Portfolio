@@ -1,12 +1,33 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
 import SearchBar from "../../components/projects/SearchBar";
 import FilterPanel from "../../components/projects/FilterPanel";
 import ProjectsGrid from "../../components/projects/ProjectsGrid";
 import { useProjects } from "../../components/projects/useProjects";
 import { useProjectFilters } from "../../components/projects/useProjectFilters";
+
+export type Tech = {
+  name: string;
+  icon?: any;
+  bgColor?: string;
+};
+
+export type Project = {
+  id: number; // FIX: Ensure 'id' is included here and exported
+  slug: string;
+  title: string;
+  brief?: string;
+  thumbnail?: string;
+  pinned?: boolean;
+  category?: string;
+  year?: number;
+  status?: string;
+  tags?: string[];
+  techStack?: Tech[];
+  idx: number; 
+};
+
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -19,7 +40,20 @@ const itemVariants = {
 };
 
 export default function ProjectsPage() {
-  const { projects, categories, years, statuses } = useProjects();
+  
+  // 3. CORRECT TYPE ASSERTION for useProjects:
+  const { 
+    projects,
+    categories,
+    years,
+    statuses
+  } = useProjects() as {
+    projects: Project[];
+    categories: string[];
+    years: string[];
+    statuses: string[];
+  };
+
   const {
     search,
     setSearch,
@@ -36,11 +70,9 @@ export default function ProjectsPage() {
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
-    // If projects haven't loaded yet, keep loading
     if (!projects || projects.length === 0) {
       timer = setTimeout(() => setShowNoProjects(true), 1000);
     } else if (filteredProjects.length === 0) {
-      // Projects loaded but filtered result is empty
       timer = setTimeout(() => setShowNoProjects(true), 1000);
     } else {
       setShowNoProjects(false);
@@ -103,7 +135,7 @@ export default function ProjectsPage() {
       </div>
 
       <ProjectsGrid
-        projects={filteredProjects}
+        projects={filteredProjects} 
         showNoProjects={showNoProjects}
         onStatusClick={handleStatusClick}
         onCategoryClick={handleCategoryClick}

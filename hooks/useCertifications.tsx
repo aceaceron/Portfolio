@@ -16,7 +16,6 @@ export default function useCertifications() {
         const { data, error: fetchError } = await supabase
           .from("certifications")
           .select("*")
-          .order("date_earned", { ascending: false });
 
         if (fetchError) {
           setError(`Failed to load certifications: ${fetchError.message}`);

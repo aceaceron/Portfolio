@@ -14,16 +14,20 @@ type Tech = {
 };
 
 type Project = {
+  // 💥 FIX: ADD THE REQUIRED 'id' PROPERTY HERE
+  id: number;
   slug: string;
   title: string;
   brief?: string;
   thumbnail?: string;
   pinned?: boolean;
   category?: string;
-  year?: number;
+  // Note: project.year is number here, but filters.year is string.
+  year?: number; 
   status?: string;
   tags?: string[];
   techStack?: Tech[];
+  idx: number; 
 };
 
 export function useProjectFilters(projects: Project[]) {

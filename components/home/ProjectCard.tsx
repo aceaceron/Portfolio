@@ -1,47 +1,15 @@
 "use client";
-import { JSX, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { IconType } from "react-icons";
 import { ChevronRight } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
-import { FaHtml5, FaCss3, FaJs, FaReact, FaPhp, FaNodeJs, FaPython } from "react-icons/fa";
-import { 
-  SiNextdotjs, 
-  SiTailwindcss, 
-  SiSupabase, 
-  SiMysql, 
-  SiPostgresql,
-  SiMongodb,
-  SiTypescript,
-  SiExpress,
-  SiDjango,
-  SiFlask
-} from "react-icons/si";
+// Import icons
+import { iconMap } from "../../utils/icons";
 
-// Enhanced icon mapping with more technologies
-const iconMap: Record<string, any> = {
-  FaHtml5,
-  FaCss3,
-  FaJs,
-  FaReact,
-  FaPhp,
-  FaNodeJs,
-  FaPython,
-  SiNextdotjs,
-  SiTailwindcss,
-  SiSupabase,
-  SiMysql,
-  SiPostgresql,
-  SiMongodb,
-  SiTypescript,
-  SiExpress,
-  SiDjango,
-  SiFlask,
-};
 
 type Skill = {
   name: string;
-  icon: IconType | (() => JSX.Element);
+  icon: any;
   bgColor: string;
 };
 
@@ -54,8 +22,8 @@ type Props = {
   projectLink?: string;
   techStack?: Skill[];
   isSinglePinned?: boolean;
-  projectId?: string; // Add project ID to fetch from Supabase
-  slug?: string; // Alternative identifier
+  projectId?: string;
+  slug?: string;
 };
 
 // Initialize Supabase client
@@ -295,7 +263,7 @@ export default function ProjectCard({
                         >
                           <Icon size={24} /> {/* slightly bigger icon */}
                         </motion.div>
-                        <motion.span className="mt-1 text-white text-[11px] font-semibold text-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <motion.span className="mt-1 text-white text-[11px] font-semibold text-center opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                           {tech.name}
                         </motion.span>
                       </div>

@@ -1,12 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../../lib/supabase.client";
-import { FaHtml5, FaCss3, FaJs, FaReact, FaPhp } from "react-icons/fa";
-import {
-  SiNextdotjs,
-  SiTailwindcss,
-  SiSupabase,
-  SiMysql,
-} from "react-icons/si";
+import { iconMap } from "../../utils/icons";
 
 type Tech = {
   name: string;
@@ -25,18 +19,7 @@ type Project = {
   status?: string;
   tags?: string[];
   techStack?: Tech[];
-};
-
-const iconMap: Record<string, any> = {
-  FaHtml5,
-  FaCss3,
-  FaJs,
-  FaReact,
-  FaPhp,
-  SiNextdotjs,
-  SiTailwindcss,
-  SiSupabase,
-  SiMysql,
+  idx: number; 
 };
 
 export function useProjects() {

@@ -27,19 +27,21 @@ const sectionVariants = {
   }),
 };
 
+// Define a type that aligns with what next-auth provides and your custom fields
 interface CustomSession {
   user: {
     id: string;
     name?: string | null;
     email?: string | null;
     image?: string | null;
-    isAuthor?: boolean;
+    isAuthor?: boolean; // The key field for author identification
   };
 }
 
 export default function Home() {
   const { data: session } = useSession();
-  const customSession = session as CustomSession | null;
+  // Cast the session data to your custom type for type safety
+  const customSession = session as CustomSession | null; 
 
   const { messages, isLoading } = useMessages();
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
@@ -59,7 +61,7 @@ export default function Home() {
       </motion.div>
 
       {/* Projects */}
-      <ProjectsSection />
+      <ProjectsSection/>
 
       {/* Skills */}
       <motion.section
