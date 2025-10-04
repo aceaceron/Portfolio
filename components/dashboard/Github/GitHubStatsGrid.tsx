@@ -4,7 +4,7 @@
 import CardAnimationWrapper from "../../CardAnimationWrapper";
 import DashboardCard from "../../dashboard/DashboardCard";
 import DashboardCardSkeleton from "../../dashboard/DashboardCardSkeleton";
-import ContributionCalendar from "../ContributionCalendar";
+import ContributionCalendar from "./ContributionCalendar";
 import { formatBestContributionDate } from "./utils";
 
 interface Props {

@@ -1,21 +1,7 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
 import MessageBubble from "./MessageBubble";
-
-interface Message {
-  id: string;
-  user_id: string;
-  user_name: string;
-  text: string;
-  created_at: string;
-  reply_to_message_id?: string;
-  reply_count?: number; // ✅ add this
-  users?: {
-    image: string | null;
-    is_author: boolean | null;
-  } | null;
-}
-
+import { Message } from "@/types/message"; 
 
 interface Props {
   messages: Message[];
@@ -28,6 +14,7 @@ interface Props {
   highlightedMessageId: string | null; 
   onReply: (messageId: string, userName: string) => void; 
   replyCounts?: { [key: string]: number };
+  parentMessage?: Message | null;
 }
 
 export default function ChatMessages({
@@ -40,7 +27,8 @@ export default function ChatMessages({
   onMentionClick,
   highlightedMessageId,
   onReply,
-  replyCounts
+  replyCounts,
+  parentMessage
 }: Props) {
   const [highlightedMessage, setHighlightedMessage] = useState<string | null>(highlightedMessageId);
 
@@ -56,11 +44,11 @@ export default function ChatMessages({
 
   // Attach parent messages for replies
   const messagesWithParents = messages.map(msg => ({
-    ...msg,
-    parentMessage: msg.reply_to_message_id
-      ? messages.find(m => m.id === msg.reply_to_message_id) || null
-      : null,
-  }));
+  ...msg,
+  parentMessage: msg.reply_to_message_id
+    ? messages.find(m => m.id === msg.reply_to_message_id) || undefined
+    : undefined,
+}));
 
   const inputRef = useRef<{ focusInput: () => void }>(null);
 
@@ -118,14 +106,14 @@ export default function ChatMessages({
         messagesWithParents.map((msg) => (
           <MessageBubble
             key={msg.id}
-            msg={msg}
+            messages={msg}
             isOwnMessage={customSession && msg.user_id === customSession.user?.id}
             customSession={customSession}
             onDelete={onDelete}
             onMentionClick={handleMention} // use internal highlight logic
             isHighlighted={msg.id === highlightedMessage}
             onReply={(msgId, userName) => handleReply(msgId, userName, msg.parentMessage?.id)}
-            replyCount={replyCounts?.[msg.id] || 0} // fetch from DB
+            replyCount={replyCounts?.[msg.id] || 0} 
             parentMessage={msg.parentMessage}
           />
         ))

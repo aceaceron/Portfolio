@@ -1,0 +1,41 @@
+import {
+  FaHtml5,
+  FaCss3,
+  FaJs,
+  FaReact,
+  FaPhp,
+  FaNodeJs,
+  FaPython,
+} from "react-icons/fa";
+import {
+  SiNextdotjs,
+  SiTailwindcss,
+  SiSupabase,
+  SiMysql,
+  SiPostgresql,
+  SiMongodb,
+  SiTypescript,
+  SiExpress,
+  SiDjango,
+  SiFlask,
+} from "react-icons/si";
+
+export const iconMap: Record<string, any> = {
+  FaHtml5,
+  FaCss3,
+  FaJs,
+  FaReact,
+  FaPhp,
+  FaNodeJs,
+  FaPython,
+  SiNextdotjs,
+  SiTailwindcss,
+  SiSupabase,
+  SiMysql,
+  SiPostgresql,
+  SiMongodb,
+  SiTypescript,
+  SiExpress,
+  SiDjango,
+  SiFlask,
+};

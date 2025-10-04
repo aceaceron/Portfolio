@@ -8,7 +8,7 @@ import ChatInput from "@/components/chat/ChatInput";
 import AuthPrompt from "@/components/chat/AuthPrompt";
 import ConfirmDeleteModal from "@/components/chat/ConfirmDeleteModal";
 
-interface Message {
+export interface Message {
   id: string;
   user_id: string;
   user_name: string;
@@ -16,6 +16,7 @@ interface Message {
   created_at: string;
   reply_to_message_id?: string;
   reply_count?: number;
+  parentMessage?: Message | null;
   users?: {
     image: string | null;
     is_author: boolean | null;
