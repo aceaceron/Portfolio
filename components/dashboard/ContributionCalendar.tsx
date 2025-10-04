@@ -44,6 +44,7 @@ function getLevel(count: number): number {
 
 interface ContributionCalendarProps {
   calendar: CalendarData;
+  shouldAnimate: boolean;
 }
 
 function generateMonths(weeks: ContributionWeek[]): Month[] {
@@ -72,6 +73,7 @@ function generateMonths(weeks: ContributionWeek[]): Month[] {
 
 export default function ContributionCalendar({
   calendar,
+  shouldAnimate,
 }: ContributionCalendarProps) {
   const tooltipId = "custom-github-tooltip";
 
@@ -116,27 +118,43 @@ export default function ContributionCalendar({
   const weekWidth = blockSize + blockMargin;
 
   // Animation state
-  const [animatedBlocks, setAnimatedBlocks] = useState<Set<string>>(new Set());
+  const [fullyVisibleBlocks, setFullyVisibleBlocks] = useState<Set<string>>(
+    new Set()
+  );
 
   useEffect(() => {
+    // 1. Conditional start based on prop
+    if (!shouldAnimate) return;
+
     const allBlocks: string[] = [];
     filteredWeeks.forEach((week) =>
       week.contributionDays.forEach((day) => allBlocks.push(day.date))
     );
 
-    // Shuffle array randomly
+    // 2. Shuffle logic
     for (let i = allBlocks.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [allBlocks[i], allBlocks[j]] = [allBlocks[j], allBlocks[i]];
     }
 
-    // Animate blocks sequentially
+    // 3. Start the cascading animation
+    const timeouts: NodeJS.Timeout[] = [];
     allBlocks.forEach((id, index) => {
-      setTimeout(() => {
-        setAnimatedBlocks((prev) => new Set(prev).add(id));
-      }, index * 1); 
+      // Corrected delay to 1ms for faster animation
+      const timeout = setTimeout(() => {
+        setFullyVisibleBlocks((prev) => new Set(prev).add(id));
+      }, index * 0.01); 
+      timeouts.push(timeout);
     });
-  }, [filteredWeeks]);
+
+    // 4. Cleanup function
+    return () => {
+      timeouts.forEach(clearTimeout);
+    };
+    
+    // **Removed the duplicate, unreachable code block here**
+
+  }, [filteredWeeks, shouldAnimate]); // Dependency array is correct
 
   return (
     <div>
@@ -251,13 +269,15 @@ export default function ContributionCalendar({
               >
                 {week.contributionDays.map((day) => {
                   const level = getLevel(day.contributionCount);
-                  const isAnimated = animatedBlocks.has(day.date);
+                  const isVisible = fullyVisibleBlocks.has(day.date);
 
                   return (
                     <div
                       key={day.date}
                       data-tooltip-id={tooltipId}
-                      data-tooltip-content={`${day.contributionCount} contribution${
+                      data-tooltip-content={`${
+                        day.contributionCount
+                      } contribution${
                         day.contributionCount !== 1 ? "s" : ""
                       } on ${new Date(day.date).toDateString()}`}
                       style={{
@@ -266,9 +286,13 @@ export default function ContributionCalendar({
                         backgroundColor: LEVEL_COLORS[level],
                         borderRadius: 3,
                         cursor: "pointer",
-                        transform: isAnimated ? "translateY(0)" : "translateY(-20px)",
-                        opacity: isAnimated ? 1 : 0,
-                        transition: "all 0.3s ease",
+                        // Initial state: slightly transformed and invisible
+                        transform: isVisible
+                          ? "translateY(0)"
+                          : "translateY(-10px)",
+                        opacity: isVisible ? 1 : 0,
+                        transition:
+                          "transform 0.3s ease-out, opacity 0.3s ease-out", // Smooth transition
                       }}
                     />
                   );

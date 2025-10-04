@@ -1,3 +1,4 @@
+// components/dashboard/ContributionCalendar.tsx (Modified)
 "use client";
 
 import CardAnimationWrapper from "../../CardAnimationWrapper";
@@ -19,6 +20,9 @@ export default function GitHubStatsGrid({
   yearLoading,
   selectedYear,
 }: Props) {
+  // Determine if the calendar card is ready and fully loaded
+  const calendarReady = !loading && !yearLoading;
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
       {loading ? (
@@ -83,11 +87,12 @@ export default function GitHubStatsGrid({
         {(loading || yearLoading) && (
           <div className="animate-pulse h-[200px] md:h-[300px]" />
         )}
-        {!loading &&
-          !yearLoading &&
+        {/* Pass the calendarReady flag as the shouldAnimate prop */}
+        {calendarReady &&
           github?.contributionsCollection?.contributionCalendar && (
             <ContributionCalendar
               calendar={github.contributionsCollection.contributionCalendar}
+              shouldAnimate={calendarReady} 
             />
           )}
       </CardAnimationWrapper>

@@ -61,7 +61,7 @@ export default function WakaTimeCards({
             <DashboardCard
               title="Lifetime Coding Time"
               value={allTimeLoading ? "Loading..." : allTimeData?.data?.text || "—"}
-              description="Since joined WakaTime"
+              description="Since joining WakaTime"
               icon={<Calendar className="w-5 h-5 text-green-400" />}
               className="h-full w-full"
             />

@@ -78,6 +78,8 @@ interface Message {
   user_name: string;
   text: string;
   created_at: string;
+  reply_to_message_id?: string;
+  reply_count?: number; // ✅ add this
   users?: {
     image: string | null;
     is_author: boolean | null;
@@ -155,6 +157,7 @@ export default function Home() {
       .select(
         `
         *,
+        reply_count,
         users:user_id (
           image,
           is_author
@@ -164,9 +167,20 @@ export default function Home() {
       .order("created_at", { ascending: true });
 
     if (!error && data) {
-      const decrypted = await decryptMessages(data);
+      const decrypted = await decryptMessages(
+        data.map((d: any) => ({
+          id: d.id,
+          user_id: d.user_id,
+          user_name: d.user_name,
+          text: d.text,
+          created_at: d.created_at,
+          reply_to_message_id: d.reply_to_message_id,
+          users: d.users || null,
+        }))
+      );
       setMessages(decrypted);
     }
+
     setIsLoading(false);
   };
 
@@ -576,8 +590,16 @@ export default function Home() {
             onDelete={() => {}}
             messagesEndRef={messagesEndRef}
             containerRef={messagesContainerRef}
+            replyCounts={Object.fromEntries(
+              messages.map(m => [m.id, m.reply_count || 0])
+            )}
+            onMentionClick={(userName) => {
+            }}
+            highlightedMessageId={null} 
+            onReply={() => {}}            
           />
         </GlowingCardWrapper>
+
         <hr className="mt-6 border-[#FFD700]" />
       </motion.section>
 
