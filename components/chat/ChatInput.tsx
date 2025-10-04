@@ -8,6 +8,7 @@ import {
   useImperativeHandle,
 } from "react";
 import { FaTimes } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface Message {
   id: string;
@@ -103,37 +104,46 @@ const ChatInput = forwardRef(function ChatInput(
         Your messages and account details are securely encrypted.
       </p>
 
-      <div className="relative w-full max-w-3xl px-2 sm:px-0">
+      <div className="relative w-full max-w-[80vw] px-2 sm:px-0">
         {/* Reply Context */}
-        {replyToMessage && (
-          <div className="flex items-center justify-between p-3 rounded-xl bg-gray-800/90 backdrop-blur-sm border border-gray-700 mb-2 shadow-md">
-            <div className="text-sm flex-1 overflow-hidden">
-              <p className="text-gray-300 font-medium">
-                {replyToMessage.user_id === currentUserId ? (
-                  <>Replying to yourself</>
-                ) : (
-                  <>
-                    Replying to{" "}
-                    <span className="text-yellow-400 font-semibold">
-                      {replyToMessage.user_name}
-                    </span>
-                  </>
-                )}
-              </p>
-              <p className="text-xs text-gray-400 truncate max-w-full sm:max-w-md">
-                "{replyToMessage.text.substring(0, 50)}
-                {replyToMessage.text.length > 50 ? "..." : ""}"
-              </p>
-            </div>
-            <button
-              onClick={onClearReply}
-              className="text-gray-400 hover:text-red-500 transition-colors ml-3"
-              title="Cancel Reply"
+        <AnimatePresence>
+          {replyToMessage && (
+            <motion.div
+              key={replyToMessage.id}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              className="flex items-center justify-between p-3 rounded-xl bg-gray-800/90 backdrop-blur-sm border border-gray-700 mb-2 shadow-md"
             >
-              <FaTimes className="h-4 w-4" />
-            </button>
-          </div>
-        )}
+              <div className="text-sm flex-1 overflow-hidden">
+                <p className="text-gray-300 font-medium">
+                  {replyToMessage.user_id === currentUserId ? (
+                    <>Replying to yourself</>
+                  ) : (
+                    <>
+                      Replying to{" "}
+                      <span className="text-yellow-400 font-semibold">
+                        {replyToMessage.user_name}
+                      </span>
+                    </>
+                  )}
+                </p>
+                <p className="text-xs text-gray-400 truncate max-w-[80vw] sm:max-w-md">
+                  "{replyToMessage.text.substring(0, 50)}
+                  {replyToMessage.text.length > 50 ? "..." : ""}"
+                </p>
+              </div>
+              <button
+                onClick={onClearReply}
+                className="text-gray-400 hover:text-red-500 transition-colors ml-3"
+                title="Cancel Reply"
+              >
+                <FaTimes className="h-4 w-4" />
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Input + Send */}
         <div className="flex flex-col sm:flex-row items-center sm:items-stretch w-full space-y-3 sm:space-y-0 sm:space-x-3">
