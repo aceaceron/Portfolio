@@ -13,17 +13,18 @@ const navLinks = [
   { name: "Certifications", href: "/certifications", icon: Award },
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Contact", href: "/contact", icon: Mail },
-  { name: "Chat Hub", href: "/chat", icon: HiOutlineChat },
+  { name: "Chat Hub", href: "/chat", icon: HiOutlineChat, },
 ];
 
 // Nav link component with grouped hover animation + active highlight
 function NavLink({ link }: { link: typeof navLinks[0] }) {
-  const pathname = usePathname();
+  const pathname = usePathname(); // get current path
   const Icon = link.icon;
   const [isHovered, setIsHovered] = useState(false);
-  const isActive = pathname === link.href || 
-    (link.href === "/projects" && pathname.startsWith("/projects/"));
-  
+
+  // Determine if this link is active
+  const isActive = pathname === link.href || (link.href === "/projects" && pathname.startsWith("/projects/"));
+
   return (
     <motion.div
       className="flex items-center gap-2 cursor-pointer"
@@ -54,6 +55,7 @@ function NavLink({ link }: { link: typeof navLinks[0] }) {
 }
 
 // Variants
+// Adjust panelVariants to slide down from just below the top bar's height (approx 56px)
 const panelVariants: Variants = {
   hidden: { height: 0, opacity: 0, transition: { duration: 0.3 } },
   visible: { 
@@ -78,6 +80,7 @@ const linkVariants: Variants = {
   }),
 };
 
+// Variants for first-time loading animation (desktop)
 const firstTimeVariants: Variants = {
   hidden: { y: -20, opacity: 0 },
   visible: (i: number) => ({
@@ -87,11 +90,14 @@ const firstTimeVariants: Variants = {
   }),
 };
 
+// REMOVED THE DUPLICATE EXPORT DEFAULT FROM HERE
+
 function Navbar() {
   const [open, setOpen] = useState(false);
   const [isFirstTime, setIsFirstTime] = useState(false);
-  
+
   useEffect(() => {
+    // Check if this is the first time visiting any page in this session
     const hasVisited = sessionStorage.getItem('hasVisitedBefore');
     if (!hasVisited) {
       setIsFirstTime(true);
@@ -99,14 +105,17 @@ function Navbar() {
     }
   }, []);
 
+  // Function to close menu on link click
   const handleLinkClick = () => {
     setOpen(false);
   };
 
   return (
     <>
-      {/* Desktop Vertical Navbar */}
+      {/* Desktop Vertical Navbar (z-50) */}
       <aside className="hidden md:flex flex-col fixed top-0 left-0 h-full w-64 bg-gradient-to-b from-[#0F172A] to-[#FFD700] border-r border-gray-700 z-50 px-6 py-8">
+        {/* Logo & Title */}
+        {/* Desktop Logo & Title */}
         <div className="flex flex-col items-start gap-2 mb-6">
           <a href="/" className="flex items-center gap-3 w-full">
             <div className="w-16 h-16 md:w-20 md:h-12 rounded-full overflow-hidden border-2 border-[#FFD700]">
@@ -116,7 +125,7 @@ function Navbar() {
           </a>
           <hr className="border-t border-gray-500 w-full mt-2" />
         </div>
-        
+        {/* Navigation Links */}
         <nav className="flex flex-col gap-4 text-white text-base">
           {navLinks.map((l, i) => (
             <motion.div
@@ -126,154 +135,144 @@ function Navbar() {
               initial={isFirstTime ? "hidden" : false}
               animate={isFirstTime ? "visible" : false}
             >
+              {/* Replaced <Link> with <a> */}
               <a href={l.href}><NavLink link={l} /></a>
             </motion.div>
           ))}
         </nav>
-        
+        {/* Footer - Keep for desktop as part of the fixed vertical nav */}
         <p className="hidden md:block text-black mt-auto text-center text-sm">
           © {new Date().getFullYear()} Christian Luis Aceron. All rights reserved.
         </p>
       </aside>
-
-      {/* Mobile Top Navbar */}
+      {/* Mobile Top Navbar and Smart Animated Menu */}
+      {/* Set a high z-index to ensure the fixed header is always on top of page content. */}
       <header className="md:hidden fixed top-0 left-0 w-full z-[100]"> 
         
-        {/* Top Bar - Logo and title morph into menu panel */}
-        <div
-          className={`flex items-center justify-between py-3 px-6 bg-[#0F172A] backdrop-blur relative z-[110] ${
-            open ? "border-b-0" : "border-b border-gray-700"
-          }`}
-          style={{ minHeight: "56px" }}
-        >
-          {/* Logo and Title - Keep space occupied when hidden */}
-          <div className="flex items-center gap-2 cursor-pointer" onClick={() => (window.location.href = "/")}>
-            <AnimatePresence mode="wait">
-              {!open && (
-                <motion.div
-                  key="top-bar-logo"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="flex items-center gap-2"
-                >
-                  <motion.div
-                    layoutId="logo-circle"
-                    className="w-10 h-10 rounded-full overflow-hidden border-2 border-[#FFD700] flex-shrink-0"
-                  >
-                    <img
-                      src="/images/logo.jpg"
-                      alt="Logo"
-                      width={40}
-                      height={40}
-                      className="object-cover"
-                    />
-                  </motion.div>
-                  <motion.span
-                    layoutId="logo-text"
-                    className="text-lg font-bold text-[#FFD700] whitespace-nowrap"
-                  >
-                    Christian Luis Aceron
-                  </motion.span>
-                </motion.div>
-              )}
-            </AnimatePresence>
-            {/* Invisible placeholder to maintain space when menu is open */}
-            {open && (
-              <div className="flex items-center gap-2 opacity-0 pointer-events-none">
-                <div className="w-10 h-10 flex-shrink-0" />
-                <span className="text-lg font-bold whitespace-nowrap">Christian Luis Aceron</span>
-              </div>
-            )}
-          </div>
-
-          {/* Menu/Close Button */}
+      {/* Top Bar (Contains logo and menu button) */}
+      <div
+        className={`flex items-center justify-between py-3 px-6 bg-[#0F172A] backdrop-blur relative z-[110] ${
+          open ? "border-b-0" : "border-b border-gray-700"
+        }`}
+        style={{ minHeight: "56px" }}
+      >
+        {/* Logo and Title (Small version) */}
+        {/* Mobile Logo & Title */}
+          <motion.div
+            layout
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={() => (window.location.href = "/")}
+          >
+            <motion.div
+              layoutId="logo-circle"
+              className="w-10 h-10 rounded-full overflow-hidden border-2 border-[#FFD700] flex-shrink-0"
+            >
+              <img
+                src="/images/logo.jpg"
+                alt="Logo"
+                width={40}
+                height={40}
+                className="object-cover"
+              />
+            </motion.div>
+            <motion.span
+              layoutId="logo-text"
+              className="text-lg font-bold text-[#FFD700] whitespace-nowrap"
+            >
+              Christian Luis Aceron
+            </motion.span>
+          </motion.div>
+        {/* Menu/Close Button */}
           <motion.button
             onClick={() => setOpen((v) => !v)}
             className="p-2 rounded transition"
             style={{ position: "relative", zIndex: 120 }}
           >
-            <AnimatePresence mode="popLayout" initial={false}>
-              {open ? (
-                <motion.div
-                  key="close-icon"
-                  initial={{ opacity: 0, rotate: 90 }}
-                  animate={{ opacity: 1, rotate: 0 }}
-                  exit={{ opacity: 0, rotate: -90 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                >
-                  <X size={24} className="text-white" />
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="menu-icon"
-                  initial={{ opacity: 0, rotate: -90 }}
-                  animate={{ opacity: 1, rotate: 0 }}
-                  exit={{ opacity: 0, rotate: 90 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                >
-                  <Menu size={24} className="text-white" />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.button>
-        </div>
+          <AnimatePresence mode="popLayout" initial={false}>
+            {open ? (
+              <motion.div
+                key="close-icon"
+                initial={{ opacity: 0, rotate: 90 }}
+                animate={{ opacity: 1, rotate: 0 }}
+                exit={{ opacity: 0, rotate: -90 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              >
+                <X size={24} className="text-white" />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="menu-icon"
+                initial={{ opacity: 0, rotate: -90 }}
+                animate={{ opacity: 1, rotate: 0 }}
+                exit={{ opacity: 0, rotate: 90 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              >
+                <Menu size={24} className="text-white" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.button>
+      </div>
 
-        {/* Mobile Menu Panel */}
-        <AnimatePresence>
-          {open && (
+      {/* Mobile Menu Panel (Slides down and expands below the top bar) */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            className="absolute top-full left-0 w-full bg-gradient-to-b from-[#0F172A] to-[#FFD700] backdrop-blur shadow-2xl z-40 flex flex-col overflow-y-auto"
+            variants={panelVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            style={{ paddingBottom: "20px" }}
+          >
+            {/* Large Logo and Title (Stacked) */}
             <motion.div
-              className="absolute top-full left-0 w-full bg-gradient-to-b from-[#0F172A] to-[#FFD700] backdrop-blur shadow-2xl z-40 flex flex-col overflow-y-auto"
-              variants={panelVariants}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              style={{ paddingBottom: "20px" }}
+              layout
+              layoutId="logo-container"
+              className="flex flex-col items-center px-6 py-6 gap-4"
             >
-              {/* Large Logo and Title (with layoutId for morphing) */}
-              <div className="flex flex-col items-center px-6 py-6 gap-4">
-                <motion.div
-                  layoutId="logo-circle"
-                  className="w-32 h-32 rounded-full overflow-hidden border-4 border-[#FFD700] flex-shrink-0"
-                >
-                  <img
-                    src="/images/logo.jpg"
-                    alt="Logo"
-                    width={128}
-                    height={128}
-                    className="object-cover"
-                  />
-                </motion.div>
-                <motion.span
-                  layoutId="logo-text"
-                  className="text-2xl font-bold text-[#FFD700] text-center"
-                >
-                  Christian Luis Aceron
-                </motion.span>
-                <hr className="border-t border-gray-500 w-full mt-2" />
-              </div>
-            
-              {/* Navigation Links */}
-              <nav className="flex flex-col mt-4 gap-4 px-6 text-white text-xl">
-                {navLinks.map((l, i) => (
-                  <motion.div
-                    key={l.href}
-                    custom={i}
-                    variants={linkVariants}
-                    initial="hidden"
-                    animate="visible"
-                    onClick={handleLinkClick}
-                  >
-                    <a href={l.href}>
-                      <NavLink link={l} />
-                    </a>
-                  </motion.div>
-                ))}
-              </nav>
+              <motion.div
+                layoutId="logo-circle"
+                className="w-32 h-32 rounded-full overflow-hidden border-4 border-[#FFD700] flex-shrink-0"
+              >
+                <img
+                  src="/images/logo.jpg"
+                  alt="Logo"
+                  width={128}
+                  height={128}
+                  className="object-cover"
+                />
+              </motion.div>
+              <motion.span
+                layoutId="logo-text"
+                className="text-2xl font-bold text-[#FFD700] text-center"
+              >
+                Christian Luis Aceron
+              </motion.span>
+            <hr className="border-t border-gray-500 w-full mt-2" />
             </motion.div>
-          )}
-        </AnimatePresence>
+          
+            {/* Navigation Links */}
+            <nav className="flex flex-col mt-4 gap-4 px-6 text-white text-xl">
+              {navLinks.map((l, i) => (
+                <motion.div
+                  key={l.href}
+                  custom={i}
+                  variants={linkVariants}
+                  initial="hidden"
+                  animate="visible"
+                  onClick={handleLinkClick} // Close menu on link click
+                >
+                  <a href={l.href}>
+                    <NavLink link={l} />
+                  </a>
+                </motion.div>
+              ))}
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       </header>
     </>
   );
