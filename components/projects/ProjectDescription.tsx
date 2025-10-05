@@ -2,9 +2,13 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import { FaInfoCircle, FaBullseye, FaLayerGroup, FaLaptopCode, FaTools , FaCheckCircle  } from "react-icons/fa"; // React Icons
 
-// Helper function to capitalize first letter
-const capitalizeFirst = (str: string) =>
-  str.charAt(0).toUpperCase() + str.slice(1);
+// Helper function to capitalize the first letter of each word
+const capitalizeWords = (str: string) =>
+  str
+    .split(" ")                     // split the string into words
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // capitalize each word
+    .join(" ");                     // join them back together
+
 
 type FeaturesType = Record<string, string[]> | string[];
 
@@ -81,7 +85,7 @@ export default function ProjectDescription({
             Object.entries(features).map(([key, featureList]) => (
               <div key={key} className="mt-4">
                 <h3 className="text-lg font-semibold text-yellow-400 mt-2 mb-1">
-                  {capitalizeFirst(key.replace(/_/g, " "))}
+                  {capitalizeWords(key.replace(/_/g, " "))}
                 </h3>
                 <motion.ul
                   variants={itemVariants}
@@ -108,7 +112,7 @@ export default function ProjectDescription({
           {Object.entries(tech_stack_description).map(([key, techList]) => (
             <div key={key} className="mt-4">
               <h3 className="text-lg font-semibold text-yellow-400 mt-2 mb-1">
-                {capitalizeFirst(key.replace(/_/g, " "))}
+                {capitalizeWords(key.replace(/_/g, " "))}
               </h3>
               <motion.ul
                 variants={itemVariants}

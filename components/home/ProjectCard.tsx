@@ -167,52 +167,53 @@ export default function ProjectCard({
         animate={{ rotateY: isFlipped ? 180 : 0 }}
         transition={{ type: "spring", stiffness: 200, damping: 20 }}
       >
-        {/* Front Side */}
-        <div
-          className="rounded-lg overflow-hidden bg-gray-800 border border-gray-600 text-gray-100"
-          style={{ backfaceVisibility: "hidden" }}
-        >
-          {thumbnail && (
-            <div className="relative w-full h-48">
-              <img
-                src={thumbnail}
-                alt={title + " thumbnail"}
-                className="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
-                onError={(e) => {
-                  console.error("Image failed to load:", thumbnail);
-                  (e.target as HTMLImageElement).src = "/placeholder-project.png";
-                }}
-              />
-              {pinned && (
-                <span className="absolute top-2 right-2 bg-yellow-400 text-black text-xs font-bold px-2 py-1 rounded shadow-md">
-                  Pinned
-                </span>
-              )}
-            </div>
-          )}
-          <div className="p-4 flex flex-col h-full justify-between">
-            <div>
-              <h3 className="font-semibold text-lg">{title}</h3>
-              {description && (
-                <p className="text-sm text-gray-300 mt-2">{description}</p>
-              )}
-              {/* Tags */}
-              {tags.length > 0 && (
-                <div className="flex gap-2 mt-3 flex-wrap">
-                  {tags.map((t) => (
-                    <span
-                      key={t}
-                      className="px-3 py-1 text-sm border border-white rounded-full text-white hover:bg-white hover:text-black transition-colors duration-200"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-            <div className="mt-4 flex justify-end"></div>
-          </div>
+{/* Front Side */}
+<div
+  className="rounded-lg overflow-hidden bg-gray-800 border border-gray-600 text-gray-100"
+  style={{ backfaceVisibility: "hidden" }}
+>
+  {thumbnail && (
+    <div className="relative w-full aspect-w-16 aspect-h-9">
+      <img
+        src={thumbnail}
+        alt={title + " thumbnail"}
+        className="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
+        onError={(e) => {
+          console.error("Image failed to load:", thumbnail);
+          (e.target as HTMLImageElement).src = "/placeholder-project.png";
+        }}
+      />
+      {pinned && (
+        <span className="absolute top-2 right-2 bg-yellow-400 text-black text-xs font-bold px-2 py-1 rounded shadow-md">
+          Pinned
+        </span>
+      )}
+    </div>
+  )}
+  <div className="p-4 flex flex-col h-full justify-between">
+    <div>
+      <h3 className="font-semibold text-lg">{title}</h3>
+      {description && (
+        <p className="text-sm text-gray-300 mt-2">{description}</p>
+      )}
+      {/* Tags */}
+      {tags.length > 0 && (
+        <div className="flex gap-2 mt-3 flex-wrap">
+          {tags.map((t) => (
+            <span
+              key={t}
+              className="px-3 py-1 text-sm border border-white rounded-full text-white hover:bg-white hover:text-black transition-colors duration-200"
+            >
+              {t}
+            </span>
+          ))}
         </div>
+      )}
+    </div>
+    <div className="mt-4 flex justify-end"></div>
+  </div>
+</div>
+
 
         {/* Back Side */}
         <div

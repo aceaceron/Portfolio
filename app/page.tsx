@@ -10,6 +10,7 @@ import CertificationsSection from "../components/home/CertificationsSection";
 import SkillsShowcase from "../components/home/SkillsShowcase";
 import ChatHubSection from "../components/home/ChatHubSection";
 import ContactSection from "../components/home/ContactSection";
+import CardAnimationWrapper from "@/components/CardAnimationWrapper";
 
 import useMessages from "../hooks/useMessages";
 import { contactData } from "../data/contact";
@@ -48,7 +49,7 @@ export default function Home() {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   return (
-    <div className="md:ml-64 pt-0 px-8 pb-0">
+    <CardAnimationWrapper className="px-8 md:ml-64">
       {/* Hero */}
       <motion.div
         initial="hidden"
@@ -93,6 +94,6 @@ export default function Home() {
 
       {/* Contact */}
       <ContactSection contactData={contactData} />
-    </div>
+    </CardAnimationWrapper>
   );
 }

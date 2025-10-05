@@ -14,7 +14,7 @@ export type Tech = {
 };
 
 export type Project = {
-  id: number; // FIX: Ensure 'id' is included here and exported
+  id: number; 
   slug: string;
   title: string;
   brief?: string;
@@ -41,7 +41,6 @@ const itemVariants = {
 
 export default function ProjectsPage() {
   
-  // 3. CORRECT TYPE ASSERTION for useProjects:
   const { 
     projects,
     categories,

@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   icons: [
     { rel: 'icon', url: '/favicon.ico' },
   ],
-  manifest: '/manifest.json',  // ✅ Correct way to add manifest
+  manifest: '/manifest.json',  
 };
 
 export const viewport: Viewport = {
@@ -36,11 +36,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className={`${poppins.className} bg-primary text-gray-100`}>
-        {/* WRAP THE ENTIRE APPLICATION WITH SessionWrapper */}
         <SessionWrapper> 
           <RegisterSW />  {/* This registers SW immediately */}
     
-          {/* Main wrapper to limit max width and center layout */}
           <div className="max-w-[1400px] mx-auto flex min-h-screen">
             {/* Sidebar / Navbar */}
             <Navbar />
