@@ -113,10 +113,20 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
     remotePatterns: [
+      // Your existing pattern for your primary domain
       { protocol: 'https', hostname: 'christianluisaceron.com', pathname: '/**' },
+      
+      // The new pattern to allow the Supabase host
+      { 
+        protocol: 'https', 
+        hostname: 'sofevtzqwdbudqaorxys.supabase.co', 
+        // This pathname restricts image loading to only the 'projects-images' bucket
+        pathname: '/storage/v1/object/sign/projects-images/**', 
+      },
     ],
     formats: ['image/avif', 'image/webp'],
   },
 };
+
 
 module.exports = withPWA(nextConfig);
