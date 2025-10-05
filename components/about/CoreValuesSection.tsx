@@ -69,7 +69,7 @@ export default function CoreValuesSection() {
         })}
       </div>
 
-      <hr className="mt-12 border-[#FFD700]" />
+      {/* <hr className="mt-12 border-[#FFD700]" /> */}
     </section>
   );
 }

@@ -99,9 +99,9 @@ export default function AboutPage() {
       <motion.div variants={itemVariants}>
         <CoreValuesSection />
       </motion.div>
-      <motion.div variants={itemVariants}>
+      {/* <motion.div variants={itemVariants}>
         <TestimonialsSection />
-      </motion.div>
+      </motion.div> */}
     </CardAnimationWrapper>
   );
 }
