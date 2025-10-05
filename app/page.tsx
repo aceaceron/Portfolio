@@ -76,6 +76,9 @@ export default function Home() {
         <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
           <Code size={24} className="text-[#FFD700]" /> Skills
         </h2>
+        <p className="text-gray-300 mb-4">
+          A mix of technologies, tools, and skills I’ve developed along the way.
+        </p>
         <SkillsShowcase />
         <hr className="mt-6 border-[#FFD700]" />
       </motion.section>

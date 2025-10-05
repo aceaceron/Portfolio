@@ -45,6 +45,7 @@ export default function SkillsShowcase() {
         {[...skills, ...skills].map((skill, index) => {
           const Icon = skill.icon;
           return (
+            
             <div
               key={`${skill.name}-${index}`}
               className="flex flex-col items-center justify-center min-w-[80px] sm:min-w-[100px]"

@@ -34,6 +34,7 @@ export default function CertificationsSection() {
         <h2 className="text-2xl font-semibold flex items-center gap-2">
           <Award size={24} className="text-[#FFD700]" /> Certifications
         </h2>
+
         <a
           href="/certifications"
           className="px-4 py-2 bg-[#FFD700] text-black rounded hover:bg-yellow-500 transition"
@@ -41,9 +42,16 @@ export default function CertificationsSection() {
           View All
         </a>
       </div>
+      <div>
+        <p className="text-gray-300 mb-4">
+          Credentials and achievements that validate my expertise and continuous learning.
+        </p>
+      </div>
 
       {error && <div className="text-red-400">{error}</div>}
-      {loading && <div className="text-gray-400">Loading certifications...</div>}
+      {loading && (
+        <div className="text-gray-400">Loading certifications...</div>
+      )}
       {!loading && !error && pinnedCertifications.length === 0 && (
         <div className="text-gray-400">No pinned certifications found.</div>
       )}
@@ -53,7 +61,7 @@ export default function CertificationsSection() {
             <CertificationCard
               key={cert.id || cert.slug}
               title={cert.title}
-              org={cert.org}   
+              org={cert.org}
               year={cert.date_validity}
               thumbnail={cert.thumbnail}
               pinned={cert.pinned}
