@@ -1,34 +1,13 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 
+import type { Project } from "../../types/projects";
 type FilterState = {
   category: string;
   year: string;
   status: string;
 };
 
-type Tech = {
-  name: string;
-  icon?: any;
-  bgColor?: string;
-};
-
-type Project = {
-  // 💥 FIX: ADD THE REQUIRED 'id' PROPERTY HERE
-  id: number;
-  slug: string;
-  title: string;
-  brief?: string;
-  thumbnail?: string;
-  pinned?: boolean;
-  category?: string;
-  // Note: project.year is number here, but filters.year is string.
-  year?: number; 
-  status?: string;
-  tags?: string[];
-  techStack?: Tech[];
-  idx: number; 
-};
 
 export function useProjectFilters(projects: Project[]) {
   const searchParams = useSearchParams();

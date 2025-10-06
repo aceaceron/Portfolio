@@ -2,7 +2,7 @@ import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ProjectCard from "./ProjectCard";
 
-import { Project } from "../../app/projects/ProjectsClientPage"; 
+import type { Project } from "../../types/projects";
 
 type ProjectsGridProps = {
   projects: Project[];

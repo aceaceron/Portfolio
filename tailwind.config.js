@@ -27,6 +27,11 @@ module.exports = {
     "bg-gradient-to-tr",
     "from-black",
     "to-gray-800",
+
+    // theme variants
+    "from-sky-500", "to-indigo-600",   // ocean theme gradient
+    "from-green-600", "to-emerald-700", // forest theme gradient
+    "from-orange-500", "to-pink-600",  // sunset theme gradient
   ],
   theme: {
     extend: {

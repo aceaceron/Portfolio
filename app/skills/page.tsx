@@ -17,7 +17,7 @@ export default function SkillsPage() {
       <div className="flex items-center gap-2 mb-2">
         <Code className="w-7 h-7 text-yellow-400" />
         <h1 className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-amber-600">
-          Chat Hub
+          Skills
         </h1>
       </div>
       </CardAnimationWrapper>

@@ -2,32 +2,7 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import GlowingCardWrapper from "../GlowingCardWrapper";
 import ProjectCardAnimationWrapper from "../CardAnimationWrapper";
-
-type Tech = {
-  name: string;
-  icon?: any;
-  bgColor?: string;
-};
-
-type Project = {
-  slug: string;
-  title: string;
-  brief?: string;
-  thumbnail?: string;
-  pinned?: boolean;
-  category?: string;
-  year?: number;
-  status?: string;
-  tags?: string[];
-  techStack?: Tech[];
-};
-
-type ProjectCardProps = {
-  project: Project;
-  onStatusClick: (status: string, e: React.MouseEvent) => void;
-  onCategoryClick: (category: string, e: React.MouseEvent) => void;
-  onTagOrTechClick: (value: string, e: React.MouseEvent) => void;
-};
+import type { ProjectCardProps } from "../../types/projects";
 
 export default function ProjectCard({
   project,

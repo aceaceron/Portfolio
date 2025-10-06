@@ -12,47 +12,10 @@ import ProjectGallery from "../../../components/projects/ProjectGallery";
 import RelatedProjects from "../../../components/projects/RelatedProjects";
 import ProjectDetailSkeleton from "../../../components/projects/ProjectDetailSkeleton";
 import ProjectErrorState from "../../../components/projects/ProjectErrorState";
+import type { Tech, FeaturesType, Project, ProjectDetailClientProps, ProjectDescriptionType, ProjectsResponse } from "../../../types/projects";
 
 // import all icons from your centralized icons file
 import { iconMap } from "../../../utils/icons";
-
-type Tech = {
-  name: string;
-  icon?: any;
-  bgColor?: string;
-};
-
-type FeaturesType = Record<string, string[]>;
-
-type ProjectDescriptionType = {
-  introduction?: string;
-  objectives?: string[];
-  features?: FeaturesType;
-  challenges?: string[];
-  results_benefits?: string;
-  tech_stack_description?: Record<string, string[]>;
-};
-
-type Project = {
-  slug: string;
-  title: string;
-  brief?: string;
-  description?: ProjectDescriptionType;
-  tags?: string[];
-  techStack?: Tech[];
-  github?: string;
-  liveDemo?: string;
-  gallery?: string[];
-  thumbnail?: string;
-  category?: string;
-  year?: string;
-  status?: string;
-};
-
-type ProjectDetailClientProps = {
-  slug: string;
-};
-
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -138,6 +101,7 @@ export default function ProjectDetailClient({
             category: data.category,
             year: data.year,
             status: data.status,
+            idx: data.idx ?? 0,
           };
 
           setProject(parsedProject);
@@ -153,7 +117,7 @@ export default function ProjectDetailClient({
       try {
         const { data, error } = await supabase
           .from("projects")
-          .select("slug, title, brief, tags, techstack, thumbnail")
+          .select("slug, title, brief, tags, techstack, thumbnail, idx") // ✅ include idx
           .neq("slug", slug);
 
         if (error) {
@@ -164,12 +128,40 @@ export default function ProjectDetailClient({
         if (data) {
           const shuffled = data.sort(() => 0.5 - Math.random());
           const selected = shuffled.slice(0, 2);
-          setRelatedProjects(selected);
+
+          // ✅ Map to ensure each related project has all required fields
+          const parsedRelated: Project[] = selected.map((p: any) => ({
+            slug: p.slug,
+            title: p.title,
+            brief: p.brief,
+            tags: p.tags ?? [],
+            techStack: Array.isArray(p.techstack)
+              ? p.techstack.map((t: any) => ({
+                  name: t.name,
+                  bgColor: t.bgColor,
+                  icon: iconMap[t.icon] || undefined,
+                }))
+              : [],
+            thumbnail: p.thumbnail,
+            idx: p.idx ?? 0, // ✅ always present
+            // optional fields for type completeness
+            description: {},
+            github: undefined,
+            liveDemo: undefined,
+            gallery: [],
+            category: undefined,
+            year: undefined,
+            status: undefined,
+            pinned: false,
+          }));
+
+          setRelatedProjects(parsedRelated); // ✅ now type-safe
         }
       } catch (err) {
         console.error("Unexpected error fetching other projects:", err);
       }
     }
+
 
     fetchProject();
     fetchOtherProjects();

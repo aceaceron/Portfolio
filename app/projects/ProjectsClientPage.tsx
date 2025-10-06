@@ -7,28 +7,7 @@ import FilterPanel from "../../components/projects/FilterPanel";
 import ProjectsGrid from "../../components/projects/ProjectsGrid";
 import { useProjects } from "../../components/projects/useProjects";
 import { useProjectFilters } from "../../components/projects/useProjectFilters";
-
-export type Tech = {
-  name: string;
-  icon?: any;
-  bgColor?: string;
-};
-
-export type Project = {
-  id: number; 
-  slug: string;
-  title: string;
-  brief?: string;
-  thumbnail?: string;
-  pinned?: boolean;
-  category?: string;
-  year?: number;
-  status?: string;
-  tags?: string[];
-  techStack?: Tech[];
-  idx: number; 
-};
-
+import type { Project } from "../../types/projects";
 
 const containerVariants = {
   hidden: { opacity: 0 },

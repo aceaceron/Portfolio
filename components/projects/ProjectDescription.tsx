@@ -1,6 +1,7 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import { FaInfoCircle, FaBullseye, FaLayerGroup, FaLaptopCode, FaTools , FaCheckCircle  } from "react-icons/fa"; // React Icons
+import type { ProjectDescriptionType , FeaturesType } from "../../types/projects";
 
 // Helper function to capitalize the first letter of each word
 const capitalizeWords = (str: string) =>
@@ -8,19 +9,6 @@ const capitalizeWords = (str: string) =>
     .split(" ")                     // split the string into words
     .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // capitalize each word
     .join(" ");                     // join them back together
-
-
-type FeaturesType = Record<string, string[]> | string[];
-
-type ProjectDescriptionProps = {
-  introduction?: string;
-  objectives?: string[];
-  features?: FeaturesType;
-  challenges?: string[];
-  results_benefits?: string;
-  itemVariants: any;
-  tech_stack_description?: Record<string, string[]>;
-};
 
 export default function ProjectDescription({
   introduction,
@@ -30,7 +18,7 @@ export default function ProjectDescription({
   results_benefits,
   itemVariants,
   tech_stack_description,
-}: ProjectDescriptionProps) {
+}: ProjectDescriptionType) {
   return (
     <>
       {/* Introduction */}
