@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import ImageGallery from "../ImageGallery";
+import { FaRegHandPaper } from "react-icons/fa";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -19,7 +20,13 @@ export default function AboutHero() {
         viewport={{ once: true, amount: 0.2 }}
         className="mb-8"
       >
-        <h1 className="text-4xl font-bold text-white mb-4">About Me</h1>
+        
+        <div className="flex items-center gap-2 mb-2">
+          <FaRegHandPaper className="w-7 h-7 text-yellow-400" />
+          <h1 className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-amber-600">
+            About Me
+          </h1>
+        </div>
         <p className="text-gray-300">
           Hello again! I am Christian Luis Aceron currently residing in Labo, Camarines Norte, Philippines.
         </p>

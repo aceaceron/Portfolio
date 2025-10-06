@@ -1,5 +1,6 @@
 "use client";
 
+import { Code } from "lucide-react";
 import { motion } from "framer-motion";
 import { skillsData } from "../../components/SkillsGrid";
 import CardAnimationWrapper, { childVariants } from "../../components/CardAnimationWrapper";
@@ -12,9 +13,13 @@ export default function SkillsPage() {
   return (
     <div className="md:ml-64 px-8">
       <CardAnimationWrapper index={0} className="mb-2 text-left">
-        <motion.h1 variants={childVariants} className="text-3xl md:text-3xl font-bold text-white">
-          Skills
-        </motion.h1>
+        
+      <div className="flex items-center gap-2 mb-2">
+        <Code className="w-7 h-7 text-yellow-400" />
+        <h1 className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-amber-600">
+          Chat Hub
+        </h1>
+      </div>
       </CardAnimationWrapper>
 
       <CardAnimationWrapper index={1} className="mb-4 text-left">

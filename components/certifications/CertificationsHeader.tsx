@@ -1,5 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
+import { Award } from "lucide-react";
 
 interface CertificationsHeaderProps {
   loading: boolean;
@@ -16,14 +17,12 @@ export default function CertificationsHeader({ loading }: CertificationsHeaderPr
           transition={{ repeat: Infinity, duration: 1.2 }}
         />
       ) : (
-        <motion.h1
-          className="text-3xl font-bold mb-2"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          Certifications
-        </motion.h1>
+          <div className="flex items-center gap-2 mb-2">
+            <Award className="w-7 h-7 text-yellow-400" />
+            <h1 className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-amber-600">
+              Certifications
+            </h1>
+          </div>
       )}
 
       {/* Brief Description */}

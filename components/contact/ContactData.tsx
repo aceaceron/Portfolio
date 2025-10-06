@@ -1,8 +1,9 @@
 import { Mail, Facebook, Linkedin, Github, Code, LucideIcon } from "lucide-react";
+import { SiTiktok } from "react-icons/si"; // ✅ TikTok icon
 
 export interface ContactItem {
   name: string;
-  Icon: LucideIcon;
+  Icon: LucideIcon | any;
   description: string;
   link: string;
   color: string;
@@ -50,13 +51,21 @@ export const contactData: ContactItem[] = [
   {
     name: "Google Developers Account",
     Icon: Code,
-    description: "Check out my profile, articles, or contributions on Google Developer platforms.",
+    description: "Check out my profile on Google Developer platforms.",
     link: "https://developers.google.com/profile/u/aceaceron",
     color: "text-yellow-400",
     hoverBg: "hover:bg-yellow-600/20",
     buttonLabel: "View My Dev Profile",
   },
+  {
+    name: "TikTok Profile",
+    Icon: SiTiktok,
+    description: "Follow me on TikTok for coding, projects, and personal content.",
+    link: "https://www.tiktok.com/@christianluisaceron",
+    color: "text-pink-500",
+    hoverBg: "hover:bg-pink-600/20",
+    buttonLabel: "Follow me on TikTok",
+  },
 ];
 
-export const mainContacts = contactData.slice(0, 3);
-export const specialContacts = contactData.slice(3, 5);
+export const mainContacts = contactData.slice(0, 6);

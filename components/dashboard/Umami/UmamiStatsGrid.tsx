@@ -3,6 +3,7 @@
 import CardAnimationWrapper from "../../CardAnimationWrapper";
 import DashboardCard from "../../dashboard/DashboardCard";
 import DashboardCardSkeleton from "../../dashboard/DashboardCardSkeleton";
+import CountUp from "react-countup";
 
 interface Props {
   umami: any;
@@ -16,7 +17,7 @@ export default function UmamiStatsGrid({ umami, loading }: Props) {
     { title: "Visits", value: umami?.websiteStats?.visits?.value || 0, desc: "All visits" },
     { title: "Countries", value: umami?.websiteStats?.countries?.value || 1, desc: "Visitor countries" },
     { title: "Events", value: umami?.websiteStats?.events?.value || 0, desc: "Tracked events" },
-    { title: "Average Visit Duration", value: umami?.websiteStats?.avgDuration?.formatted || "0 min", desc: "Average time spent" },
+    { title: "Visit Duration", value: umami?.websiteStats?.avgDuration?.formatted || "0 min", desc: "Average time spent" },
   ];
 
   return (
@@ -32,7 +33,13 @@ export default function UmamiStatsGrid({ umami, loading }: Props) {
             <CardAnimationWrapper key={i} index={18 + i}>
               <DashboardCard
                 title={s.title}
-                value={s.value}
+                value={
+                  typeof s.value === "number" ? (
+                    <CountUp start={1} end={s.value} duration={2} separator="," />
+                  ) : (
+                    s.value
+                  )
+                }
                 description={s.desc}
                 className="w-full h-full flex flex-col"
               />

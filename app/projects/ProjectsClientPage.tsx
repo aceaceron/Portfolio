@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { Folder } from "lucide-react";
 import { motion } from "framer-motion";
 import SearchBar from "../../components/projects/SearchBar";
 import FilterPanel from "../../components/projects/FilterPanel";
@@ -106,7 +107,13 @@ export default function ProjectsPage() {
       animate="visible"
     >
       <motion.div variants={itemVariants}>
-        <h1 className="text-3xl font-bold mb-2">Projects</h1>
+        
+        <div className="flex items-center gap-2 mb-2">
+          <Folder className="w-7 h-7 text-yellow-400" />
+          <h1 className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-amber-600">
+            Projects
+          </h1>
+        </div>
         <p className="text-gray-300 mb-4">
           A collection of my works including web systems, games, and designs.
         </p>

@@ -55,8 +55,8 @@ export default function ContactSection({ contactData }: Props) {
         onClick={() => router.push("/contact")}
         className="cursor-pointer w-full border border-gray-600 rounded-xl p-4"
       >
-        {/* Desktop: 5 icons in a single row */}
-        <div className="hidden md:flex justify-between gap-4">
+        {/* Responsive Grid: auto-adjusts rows/columns */}
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">
           {contactData.map((contact, index) => (
             <div
               key={index}
@@ -64,47 +64,11 @@ export default function ContactSection({ contactData }: Props) {
                 flex flex-col items-center justify-center 
                 p-4 rounded-lg transition 
                 ${contact.hoverBg} hover:scale-105
-                flex-1
               `}
             >
               <contact.Icon className={`w-10 h-10 ${contact.color}`} />
             </div>
           ))}
-        </div>
-
-        {/* Mobile: 3 + 2 icons in two rows */}
-        <div className="flex flex-col gap-4 md:hidden">
-          {/* First row: 3 icons */}
-          <div className="flex justify-between">
-            {contactData.slice(0, 3).map((contact, index) => (
-              <div
-                key={index}
-                className={`
-                  flex flex-col items-center justify-center 
-                  p-4 rounded-lg transition 
-                  ${contact.hoverBg} hover:scale-105
-                `}
-              >
-                <contact.Icon className={`w-10 h-10 ${contact.color}`} />
-              </div>
-            ))}
-          </div>
-
-          {/* Second row: 2 icons */}
-          <div className="flex justify-around">
-            {contactData.slice(3, 5).map((contact, index) => (
-              <div
-                key={index}
-                className={`
-                  flex flex-col items-center justify-center 
-                  p-4 rounded-lg transition 
-                  ${contact.hoverBg} hover:scale-105
-                `}
-              >
-                <contact.Icon className={`w-10 h-10 ${contact.color}`} />
-              </div>
-            ))}
-          </div>
         </div>
       </GlowingCardWrapper>
     </motion.section>

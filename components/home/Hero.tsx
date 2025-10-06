@@ -2,6 +2,7 @@
 
 import AnimatedButton from "../AnimatedButton";
 import ImageGallery from "../ImageGallery"; 
+import { ReactTyped } from "react-typed";
 
 export default function Hero() {
   return (
@@ -14,7 +15,15 @@ export default function Hero() {
 
         {/* Right Text */}
         <div>
-          <h1 className="text-2xl text-accent">Hi, I’m Christian Luis Aceron</h1>
+           <h1 className="text-2xl text-accent">
+            <ReactTyped
+              strings={["Hi, I’m Christian Luis Aceron"]}
+              typeSpeed={50}
+              backSpeed={30}
+              showCursor={false}
+              cursorChar="|"
+            />
+          </h1>
           <p
             className="mt-4 text-white text-left"
             style={{ textIndent: '2em' }}
