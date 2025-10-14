@@ -16,6 +16,7 @@ export type ProjectDescriptionType = {
   results_benefits?: string;
   itemVariants?: any;
   tech_stack_description?: Record<string, string[]>;
+  hardware_components?: Record<string, string[]>;
 };
 
 // ✅ General Project type (used in lists, grid, filters, etc.)

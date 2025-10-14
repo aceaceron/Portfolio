@@ -18,6 +18,7 @@ export default function ProjectDescription({
   results_benefits,
   itemVariants,
   tech_stack_description,
+  hardware_components 
 }: ProjectDescriptionType) {
   return (
     <>
@@ -114,6 +115,35 @@ export default function ProjectDescription({
           ))}
         </>
       )}
+
+      {/* Hardware Components */}
+      {hardware_components &&
+        Object.keys(hardware_components).length > 0 && (
+          <>
+            <motion.div variants={itemVariants} className="flex items-center mt-6">
+              <FaTools className="mr-2 w-5 h-5 text-yellow-400" />
+              <h2 className="text-xl font-semibold">Hardware Components</h2>
+            </motion.div>
+
+            {Object.entries(hardware_components).map(([category, items]) => (
+              <div key={category} className="mt-4">
+                <h3 className="text-lg font-semibold text-yellow-400 mt-2 mb-1">
+                  {capitalizeWords(category.replace(/_/g, " "))}
+                </h3>
+                {Array.isArray(items) && items.length > 0 && (
+                  <motion.ul
+                    variants={itemVariants}
+                    className="list-disc list-inside text-gray-300 ml-4"
+                  >
+                    {items.map((item, i) => (
+                      <li key={i}>{item}</li>
+                    ))}
+                  </motion.ul>
+                )}
+              </div>
+            ))}
+          </>
+        )}
 
       {/* Challenges */}
       {challenges && challenges.length > 0 && (

@@ -56,6 +56,7 @@ export default function ProjectDetailClient({
             description = {
               ...data.description,
               features: data.description.features as FeaturesType,
+              hardware_components: data.description.hardware_components ?? {},
             };
           }
 
@@ -230,6 +231,7 @@ export default function ProjectDetailClient({
         challenges={project.description?.challenges}
         results_benefits={project.description?.results_benefits}
         tech_stack_description={project.description?.tech_stack_description}
+        hardware_components={project.description?.hardware_components}
         itemVariants={itemVariants}
       />
 
