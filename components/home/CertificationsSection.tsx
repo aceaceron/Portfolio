@@ -68,6 +68,7 @@ export default function CertificationsSection() {
               index={index}
               credentialId={cert.credential_id}
               credentialUrl={cert.credential_url}
+              onTagClick={() => {}} 
             />
           ))}
         </div>

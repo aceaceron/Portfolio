@@ -1,6 +1,7 @@
 // CertificationCard.tsx
 "use client";
 
+import CertificationTags from '../certifications/CertificationTags'; 
 import { motion } from "framer-motion";
 
 type Props = {
@@ -12,6 +13,8 @@ type Props = {
   index: number;
   credentialId?: string;
   credentialUrl?: string;
+  tags?: string[];
+  onTagClick: (tag: string) => void;
 };
 
 export default function CertificationCard({
@@ -23,6 +26,8 @@ export default function CertificationCard({
   index,
   credentialId,
   credentialUrl,
+  tags,
+  onTagClick,
 }: Props) {
   const handleClick = () => {
     if (credentialUrl) {
@@ -70,6 +75,9 @@ export default function CertificationCard({
             <p className="text-sm text-gray-300 mt-1">
               {org} • {year}
             </p>
+
+
+            <CertificationTags tags={tags} onTagClick={onTagClick} />
 
             {/* Credential ID */}
             {credentialId && (
