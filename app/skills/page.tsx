@@ -3,7 +3,9 @@
 import { Code } from "lucide-react";
 import { motion } from "framer-motion";
 import { skillsData } from "../../components/SkillsGrid";
-import CardAnimationWrapper, { childVariants } from "../../components/CardAnimationWrapper";
+import CardAnimationWrapper, {
+  childVariants,
+} from "../../components/CardAnimationWrapper";
 import { categorizeSkills } from "../../components/skills/CategorizeSkills";
 import SkillSection from "../../components/skills/SkillSection";
 
@@ -13,13 +15,12 @@ export default function SkillsPage() {
   return (
     <div className="md:ml-64 px-8">
       <CardAnimationWrapper index={0} className="mb-2 text-left">
-        
-      <div className="flex items-center gap-2 mb-2">
-        <Code className="w-7 h-7 text-yellow-400" />
-        <h1 className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-amber-600">
-          Skills
-        </h1>
-      </div>
+        <div className="flex items-center gap-2 mb-2">
+          <Code className="w-7 h-7 text-yellow-400" />
+          <h1 className="text-2xl sm:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-amber-600">
+            Skills
+          </h1>
+        </div>
       </CardAnimationWrapper>
 
       <CardAnimationWrapper index={1} className="mb-4 text-left">
@@ -30,6 +31,40 @@ export default function SkillsPage() {
 
       <CardAnimationWrapper index={2}>
         <hr className="border-[#FFD700] mb-8" />
+      </CardAnimationWrapper>
+
+      <CardAnimationWrapper index={3} className="mb-8">
+        <motion.div
+          variants={childVariants}
+          className="flex items-center gap-4 text-sm text-gray-300 flex-wrap"
+        >
+          <div className="flex items-center gap-2">
+            <span className="flex gap-1">
+              <span className="w-2 h-2 rounded-full bg-yellow-400" />
+              <span className="w-2 h-2 rounded-full bg-gray-600" />
+              <span className="w-2 h-2 rounded-full bg-gray-600" />
+            </span>
+            <span>Beginner</span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="flex gap-1">
+              <span className="w-2 h-2 rounded-full bg-yellow-400" />
+              <span className="w-2 h-2 rounded-full bg-yellow-400" />
+              <span className="w-2 h-2 rounded-full bg-gray-600" />
+            </span>
+            <span>Intermediate</span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="flex gap-1">
+              <span className="w-2 h-2 rounded-full bg-yellow-400" />
+              <span className="w-2 h-2 rounded-full bg-yellow-400" />
+              <span className="w-2 h-2 rounded-full bg-yellow-400" />
+            </span>
+            <span>Advanced</span>
+          </div>
+        </motion.div>
       </CardAnimationWrapper>
 
       {Object.entries(categorized).map(([category, skills]) => (

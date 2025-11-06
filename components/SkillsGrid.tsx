@@ -17,6 +17,55 @@ export type Skill = {
   name: string;
   icon: IconType | (() => JSX.Element);
   bgColor: string;
+  level: "Beginner" | "Intermediate" | "Advanced";
+};
+
+const levelMapping: Record<string, Skill["level"]> = {
+  // Core Web
+  HTML5: "Advanced",
+  CSS: "Advanced",
+  JavaScript: "Advanced",
+  TypeScript: "Intermediate",
+  Python: "Beginner",
+  PHP: "Beginner",
+  Java: "Intermediate",
+  "C++": "Beginner",
+  "VB.NET": "Beginner",
+
+  // Frameworks & Tools
+  React: "Intermediate",
+  "Next.js": "Intermediate",
+  Tailwind: "Intermediate",
+  "Framer Motion": "Intermediate",
+  "Node.js": "Intermediate",
+  NPM: "Intermediate",
+
+  Supabase: "Intermediate",
+  SQLite3: "Intermediate",
+  MySQL: "Advanced",
+  Firebase: "Intermediate",
+  MongoDB: "Beginner",
+
+  // Data / ML
+  NumPy: "Intermediate",
+  pandas: "Intermediate",
+  "scikit-learn": "Intermediate",
+  "Machine Learning": "Intermediate",
+  "Large Language Model": "Intermediate",
+
+  // Others
+  Git: "Advanced",
+  GitHub: "Advanced",
+  Figma: "Intermediate",
+
+  // Creative
+  "Video Editing": "Intermediate",
+  "Graphic Design": "Intermediate",
+  Canva: "Intermediate",
+  Photography: "Intermediate",
+  "Creative Writing": "Advanced",
+  "Public Speaking": "Advanced",
+  "Presentation Skills": "Advanced",
 };
 
 // Export the skills data for use in other components
@@ -30,11 +79,29 @@ export const skillsData: Skill[] = [
   { name: "Python", icon: iconMap.FaPython, bgColor: "bg-green-600" },
   { name: "Java", icon: iconMap.FaJava, bgColor: "bg-red-700" },
   { name: "C++", icon: iconMap.SiCplusplus, bgColor: "bg-blue-700" },
-  { name: "VB.NET", icon: () => <span className="text-white font-bold text-lg select-none">VB</span>, bgColor: "bg-purple-700" },
+  {
+    name: "VB.NET",
+    icon: () => (
+      <span className="text-white font-bold text-lg select-none">VB</span>
+    ),
+    bgColor: "bg-purple-700",
+  },
   { name: "Flask", icon: iconMap.SiFlask, bgColor: "bg-gray-700" },
-  { name: "React", icon: iconMap.FaReact, bgColor: "bg-gradient-to-tr from-black to-gray-800" },
-  { name: "Next.js", icon: iconMap.SiNextdotjs, bgColor: "bg-gradient-to-tr from-black to-gray-800" },
-  { name: "Tailwind", icon: iconMap.SiTailwindcss, bgColor: "bg-gradient-to-tr from-black to-gray-800" },
+  {
+    name: "React",
+    icon: iconMap.FaReact,
+    bgColor: "bg-gradient-to-tr from-black to-gray-800",
+  },
+  {
+    name: "Next.js",
+    icon: iconMap.SiNextdotjs,
+    bgColor: "bg-gradient-to-tr from-black to-gray-800",
+  },
+  {
+    name: "Tailwind",
+    icon: iconMap.SiTailwindcss,
+    bgColor: "bg-gradient-to-tr from-black to-gray-800",
+  },
   { name: "Framer Motion", icon: iconMap.SiFramer, bgColor: "bg-black" },
   { name: "Node.js", icon: iconMap.FaNodeJs, bgColor: "bg-green-700" },
   { name: "NPM", icon: iconMap.FaServer, bgColor: "bg-red-700" },
@@ -52,8 +119,20 @@ export const skillsData: Skill[] = [
   { name: "MQTT", icon: iconMap.SiMqtt, bgColor: "bg-gray-700" },
   { name: "Raspberry", icon: iconMap.SiRaspberrypi, bgColor: "bg-red-600" },
   { name: "Arduino", icon: iconMap.SiArduino, bgColor: "bg-red-400" },
-  { name: "Machine Learning", icon: () => <span className="text-white font-bold text-lg select-none">ML</span>, bgColor: "bg-orange-500" },
-  { name: "Large Language Model", icon: () => <span className="text-white font-bold text-lg select-none">LLM</span>, bgColor: "bg-purple-700" },
+  {
+    name: "Machine Learning",
+    icon: () => (
+      <span className="text-white font-bold text-lg select-none">ML</span>
+    ),
+    bgColor: "bg-orange-500",
+  },
+  {
+    name: "Large Language Model",
+    icon: () => (
+      <span className="text-white font-bold text-lg select-none">LLM</span>
+    ),
+    bgColor: "bg-purple-700",
+  },
   { name: "Git", icon: iconMap.SiGit, bgColor: "bg-orange-600" },
   { name: "GitHub", icon: iconMap.SiGithub, bgColor: "bg-gray-800" },
   { name: "Figma", icon: () => <FiFigma size={32} />, bgColor: "bg-[#F24E1E]" },
@@ -66,7 +145,10 @@ export const skillsData: Skill[] = [
   { name: "Creative Writing", icon: FileText, bgColor: "bg-green-600" },
   { name: "Public Speaking", icon: Mic, bgColor: "bg-orange-600" },
   { name: "Presentation Skills", icon: Presentation, bgColor: "bg-yellow-600" },
-];
+].map((skill) => ({
+  ...skill,
+  level: levelMapping[skill.name] ?? "Beginner", // fallback if missing
+}));
 
 // Utility function to get skill data by name
 export const getSkillByName = (name: string): Skill | undefined => {
@@ -136,6 +218,21 @@ export default function SkillsGrid() {
             <motion.span className="mt-2 text-white text-xs font-semibold text-center opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
               {skill.name}
             </motion.span>
+
+            <div className="flex gap-1 mt-1 mx-auto opacity-80">
+              {[0, 1, 2].map((index) => (
+                <span
+                  key={index}
+                  className={`w-2 h-2 rounded-full ${
+                    (skill.level === "Beginner" && index === 0) ||
+                    (skill.level === "Intermediate" && index <= 1) ||
+                    skill.level === "Advanced"
+                      ? "bg-yellow-400"
+                      : "bg-gray-600"
+                  }`}
+                />
+              ))}
+            </div>
           </motion.div>
         );
       })}
