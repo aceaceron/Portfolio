@@ -76,7 +76,7 @@ const pieChartOptions = {
     <>
       {!loading && countriesData.length > 0 && (
         <CardAnimationWrapper index={26}>
-          <motion.div variants={childVariants} className="relative p-4 bg-gray-800 rounded-lg border border-gray-600 overflow-hidden group mb-4">
+          <motion.div variants={childVariants} className="relative p-4 bg-gray-800 rounded-lg border border-gray-600 overflow-hidden group mb-8">
             <div className="radial-bg pointer-events-none absolute -inset-px opacity-0 transition duration-300 group-hover:opacity-100" />
             <div className="relative z-10">
               <ReactECharts option={pieChartOptions} style={{ height: "400px" }} />
@@ -84,7 +84,7 @@ const pieChartOptions = {
           </motion.div>
         </CardAnimationWrapper>
       )}
-
+{/* 
       {!loading && pageviewsToUse.length > 0 && sessionsToUse.length > 0 && (
         <CardAnimationWrapper index={27}>
           <motion.div variants={childVariants} className="relative p-4 bg-gray-800 rounded-lg border border-gray-600 overflow-hidden group">
@@ -95,7 +95,7 @@ const pieChartOptions = {
             </div>
           </motion.div>
         </CardAnimationWrapper>
-      )}
+      )} */}
     </>
   );
 }

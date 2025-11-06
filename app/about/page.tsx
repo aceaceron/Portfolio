@@ -75,15 +75,15 @@ export default function AboutPage() {
         className="mb-12 flex flex-wrap gap-4"
         variants={itemVariants}
       >
-        <AnimatedButton
+        {/* <AnimatedButton
           label="Download Portfolio"
           href="/portfolio.pdf"
           onClick={(e) => handleDownloadClick(e, "Portfolio", "/portfolio.pdf")}
-        />
+        /> */}
         <AnimatedButton
           label="Download Resume"
-          href="/resume.pdf"
-          onClick={(e) => handleDownloadClick(e, "Resume", "/resume.pdf")}
+          href="/Resume_ChristianLuisAceron.pdf"
+          onClick={(e) => handleDownloadClick(e, "Resume", "/Resume_ChristianLuisAceron.pdf")}
         />
       </motion.section>
 
