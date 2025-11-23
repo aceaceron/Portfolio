@@ -36,8 +36,10 @@ import {
   SiNumpy,
   SiCanva,
   SiCplusplus,
-  SiArduino,
+  SiArduino, 
 } from "react-icons/si";
+import { DiVisualstudio } from "react-icons/di";
+
 import { FiFigma } from "react-icons/fi";
 import {
   Camera,
@@ -86,6 +88,7 @@ export const iconMap: Record<string, any> = {
   SiCplusplus,
   SiArduino,
   FiFigma,
+  DiVisualstudio,
   Camera,
   PenTool,
   Video,

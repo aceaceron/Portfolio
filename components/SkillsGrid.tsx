@@ -86,6 +86,11 @@ export const skillsData: Skill[] = [
     ),
     bgColor: "bg-purple-700",
   },
+  {
+    name: "Visual Studio",
+    icon: iconMap.DiVisualstudio,
+    bgColor: "bg-indigo-700",
+  },
   { name: "Flask", icon: iconMap.SiFlask, bgColor: "bg-gray-700" },
   {
     name: "React",

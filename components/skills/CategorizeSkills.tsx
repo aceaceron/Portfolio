@@ -36,6 +36,7 @@ export const categorizeSkills = (skills: Skill[]) => ({
       "MongoDB",
       "NPM",
       "Figma",
+      "Visual Studio",
     ].includes(s.name)
   ),
   "Data & ML": skills.filter((s) =>
