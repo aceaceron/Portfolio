@@ -13,7 +13,7 @@
         },
         {
           "key": "Referrer-Policy",
-          "value": "origin-when-cross-origin"
+          "value": "strict-origin-when-cross-origin"
         },
         {
           "key": "Permissions-Policy",
@@ -21,7 +21,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; img-src 'self' data: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';"
+          "value": "default-src 'self'; img-src 'self' data: https: https://*.googleusercontent.com; script-src 'self' 'unsafe-inline' https://umami-kappa-tan.vercel.app; style-src 'self' 'unsafe-inline'; connect-src 'self' https://sofevtzqwdbudqaorxys.supabase.co https://umami-kappa-tan.vercel.app https://*.googleusercontent.com; font-src 'self';"
         }
       ]
     }
