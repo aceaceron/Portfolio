@@ -28,7 +28,7 @@ export default function Hero() {
             className="mt-4 text-white text-left"
             style={{ textIndent: '2em' }}
           >
-            I am an aspiring full-stack developer based in Labo, Camarines Norte, Philippines.
+            I am an aspiring full-stack developer and an upcoming graduating IT student.
             During college, I built systems using vanilla HTML, CSS, and JavaScript, focusing
             on creating functional and responsive user interfaces. I designed intuitive UI/UX
             layouts to ensure smooth and engaging user experiences. I also worked with databases

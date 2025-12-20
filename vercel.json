@@ -21,7 +21,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; img-src 'self' data: https: https://*.googleusercontent.com; script-src 'self' 'unsafe-inline' https://umami-kappa-tan.vercel.app; style-src 'self' 'unsafe-inline'; connect-src 'self' https://sofevtzqwdbudqaorxys.supabase.co https://umami-kappa-tan.vercel.app https://*.googleusercontent.com; font-src 'self';"
+          "value": "default-src 'self'; img-src 'self' data: https: https://*.googleusercontent.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://umami-kappa-tan.vercel.app https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; connect-src 'self' https://sofevtzqwdbudqaorxys.supabase.co wss://sofevtzqwdbudqaorxys.supabase.co https://umami-kappa-tan.vercel.app https://*.googleusercontent.com https://va.vercel-scripts.com; font-src 'self' data: https://fonts.gstatic.com;"
         }
       ]
     }

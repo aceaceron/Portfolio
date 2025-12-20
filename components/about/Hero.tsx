@@ -28,7 +28,7 @@ export default function AboutHero() {
           </h1>
         </div>
         <p className="text-gray-300">
-          Hello again! I am Christian Luis Aceron currently residing in Labo, Camarines Norte, Philippines.
+          Hello again! I am Christian Luis Aceron!
         </p>
       </motion.section>
 

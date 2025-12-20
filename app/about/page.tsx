@@ -52,8 +52,7 @@ export default function AboutPage() {
         variants={itemVariants}
       >
         <p>
-          As an aspiring full-stack developer in Labo, Camarines Norte,
-          Philippines, I build functional systems from the ground up. I leverage
+          As an aspiring full-stack developer, I build functional systems from the ground up. I leverage
           HTML, CSS, and JavaScript to create responsive and engaging user
           interfaces with a keen focus on intuitive UI/UX design.
         </p>
