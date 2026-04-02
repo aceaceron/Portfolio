@@ -8,28 +8,33 @@ export default function useCertifications() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let cancelled = false;
+
     async function fetchCertifications() {
       try {
         setLoading(true);
         setError(null);
 
+        // Select * already includes `tags`; explicit columns listed for clarity
         const { data, error: fetchError } = await supabase
           .from("certifications")
-          .select("*")
+          .select("*, tags");
 
         if (fetchError) {
-          setError(`Failed to load certifications: ${fetchError.message}`);
+          if (!cancelled) setError(`Failed to load certifications: ${fetchError.message}`);
           return;
         }
 
-        setCertifications(data || []);
+        if (!cancelled) setCertifications(data || []);
       } catch (err) {
-        setError("An unexpected error occurred while loading certifications");
+        if (!cancelled) setError("An unexpected error occurred while loading certifications");
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     }
+
     fetchCertifications();
+    return () => { cancelled = true; };
   }, []);
 
   return { certifications, loading, error };

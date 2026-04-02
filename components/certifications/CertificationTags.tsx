@@ -13,13 +13,15 @@ export default function CertificationTags({
   // Check for undefined, null, or empty array
   if (!tags || tags.length === 0) return null;
 
+  // Deduplicate the tags array using a Set
+  const uniqueTags = Array.from(new Set(tags));
+
   return (
     <div className="flex gap-2 flex-wrap mt-3">
-      {tags.map((tag) => (
+      {uniqueTags.map((tag, index) => (
         <span
-          key={tag}
+          key={`${tag}-${index}`} 
           onClick={(e) => {
-            // Stop propagation to prevent card-level clicks
             e.stopPropagation(); 
             onTagClick(tag);
           }}

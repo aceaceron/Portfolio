@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef, useMemo } from "react";
 import { useSession } from "next-auth/react";
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "@/lib/supabase.client"; // use shared singleton client
 import ChatHeader from "@/components/chat/ChatHeader";
 import ChatMessages from "@/components/chat/ChatMessages";
 import ChatInput from "@/components/chat/ChatInput";
@@ -34,9 +34,39 @@ interface CustomSession {
   };
 }
 
+// ---------------------------------------------------------------------------
+// Helpers (module-level so they are not re-created on every render)
+// ---------------------------------------------------------------------------
+async function decryptMessages(encrypted: Message[]): Promise<Message[]> {
+  try {
+    const response = await fetch("/api/auth/decrypt-messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: encrypted }),
+    });
+    if (!response.ok) return encrypted;
+    const { decryptedMessages } = await response.json();
+    return decryptedMessages;
+  } catch {
+    return encrypted;
+  }
+}
+
+async function encryptMessage(userName: string, text: string) {
+  const response = await fetch("/api/auth/encrypt-message", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userName, text }),
+  });
+  if (!response.ok) throw new Error("Encryption failed");
+  return response.json();
+}
+
+// ---------------------------------------------------------------------------
 export default function ChatPage() {
   const { data: session } = useSession();
   const customSession = session as CustomSession | null;
+
   const [replyToMessage, setReplyToMessage] = useState<Message | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -45,94 +75,31 @@ export default function ChatPage() {
   const [messageToDelete, setMessageToDelete] = useState<string | null>(null);
   const [highlightedMessageId, setHighlightedMessageId] = useState<string | null>(null);
 
-  const inputRef = useRef<HTMLInputElement | null>(null); 
-  
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
-  const handleReply = (msgId: string, userName: string) => {
-    const messageToReply = messages.find(m => m.id === msgId);
-    if (messageToReply) {
-      setReplyToMessage(messageToReply);
-      // Only prepend @ if replying to another user
-      if (messageToReply.user_id !== customSession?.user?.id) {
-        setInput(`@${userName} `);
-      } else {
-        setInput(""); // do not prepend @ for self
-      }
-    }
-  };
+  // Cache user metadata keyed by user_id to avoid a DB round-trip per new message
+  const userCache = useRef<Map<string, { image: string | null; is_author: boolean | null }>>(
+    new Map()
+  );
 
-
-  const supabase = useMemo(() => {
-    return createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
-  }, []);
-
-  const handleMentionScroll = (userName: string) => {
-    const lastMessage = messages
-      .filter(msg => msg.user_name === userName)
-      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0];
-    
-    if (lastMessage) {
-      setHighlightedMessageId(lastMessage.id);
-      const targetElement = document.getElementById(`message-${lastMessage.id}`);
-      
-      if (targetElement && messagesContainerRef.current) {
-        messagesContainerRef.current.scrollTo({
-          top: targetElement.offsetTop - messagesContainerRef.current.offsetTop,
-          behavior: 'smooth'
-        });
-      }
-      
-      setTimeout(() => {
-        setHighlightedMessageId(null);
-      }, 2000);
-    }
-  };
-
-  const decryptMessages = async (encryptedMessages: Message[]): Promise<Message[]> => {
-    try {
-      const response = await fetch("/api/auth/decrypt-messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: encryptedMessages }),
-      });
-      if (!response.ok) return encryptedMessages;
-      const { decryptedMessages } = await response.json();
-      return decryptedMessages;
-    } catch (error) {
-      console.error("Error decrypting:", error);
-      return encryptedMessages;
-    }
-  };
-
-  const encryptMessage = async (userName: string, text: string) => {
-    const response = await fetch("/api/auth/encrypt-message", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userName, text }),
-    });
-    if (!response.ok) throw new Error("Encryption failed");
-    return response.json();
-  };
-
+  // -------------------------------------------------------------------------
+  // Fetch messages (single query with join)
+  // -------------------------------------------------------------------------
   const fetchMessages = async () => {
     setIsLoading(true);
     const { data, error } = await supabase
       .from("messages")
-      .select(`
-        *,
-        users:user_id (
-          image,
-          is_author
-        )
-      `)
+      .select("*, users:user_id (image, is_author)")
       .order("created_at", { ascending: true });
-    
+
     if (!error && data) {
+      // Seed cache from join result so real-time handlers rarely need a DB call
+      data.forEach((d: any) => {
+        if (d.user_id && d.users) userCache.current.set(d.user_id, d.users);
+      });
+
       const decrypted = await decryptMessages(
         data.map((d: any) => ({
           id: d.id,
@@ -150,87 +117,36 @@ export default function ChatPage() {
     setIsLoading(false);
   };
 
-  const handleDelete = async (messageId: string) => {
-    if (!customSession?.user?.isAuthor) return;
-    
-    // Database trigger will automatically decrement reply_count of parent message
-    const { error } = await supabase.from("messages").delete().eq("id", messageId);
-    if (!error) {
-      setMessages((prev) => prev.filter((msg) => msg.id !== messageId));
-    }
-  };
-
-  const handleSend = async () => {
-    if (!input.trim() || !customSession?.user) return;
-    try {
-      const { encryptedUserName, encryptedText } = await encryptMessage(
-        customSession.user.name || "Anonymous",
-        input.trim()
-      );
-      
-      // Insert message with user relationship for Author badge
-      const { data: insertedData, error: insertError } = await supabase
-        .from("messages")
-        .insert({
-          user_id: customSession.user.id,
-          user_name: encryptedUserName,
-          text: encryptedText,
-          reply_to_message_id: replyToMessage?.id || null,
-        })
-        .select(`
-          *,
-          users:user_id (
-            image,
-            is_author
-          )
-        `)
-        .single();
-
-      if (insertError || !insertedData) {
-        console.error(insertError);
-        return;
-      }
-
-      const [decryptedMessage] = await decryptMessages([insertedData]);
-      setMessages(prev => [...prev, decryptedMessage]);
-
-      // ✅ Database trigger automatically handles reply_count increment
-      // No manual increment needed!
-
-      setInput("");
-      setReplyToMessage(null);
-      setTimeout(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-      }, 50);
-    } catch (err) {
-      console.error("Send failed:", err);
-    }
-  };
-
+  // -------------------------------------------------------------------------
+  // Real-time subscription
+  // -------------------------------------------------------------------------
   useEffect(() => {
-    const fetch = async () => {
-      await fetchMessages();
-    };
-    fetch();
+    fetchMessages();
 
     const channel = supabase
-      .channel("messages-channel")
+      .channel("chat-messages-channel")
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "messages" },
         async (payload) => {
-          const { data: userData } = await supabase
-            .from("users")
-            .select("image, is_author")
-            .eq("id", payload.new.user_id)
-            .single();
-          
-          const newMessage: Message = {
-            ...(payload.new as Message),
-            users: userData ? { image: userData.image, is_author: userData.is_author } : null,
-          };
-          
-          const [decrypted] = await decryptMessages([newMessage]);
+          const newMsg = payload.new as Message;
+
+          // Resolve user metadata from cache; only hit DB for unseen users
+          let userMeta = userCache.current.get(newMsg.user_id) ?? null;
+          if (!userMeta) {
+            const { data: userData } = await supabase
+              .from("users")
+              .select("image, is_author")
+              .eq("id", newMsg.user_id)
+              .single();
+            if (userData) {
+              userMeta = { image: userData.image, is_author: userData.is_author };
+              userCache.current.set(newMsg.user_id, userMeta);
+            }
+          }
+
+          const enriched: Message = { ...newMsg, users: userMeta };
+          const [decrypted] = await decryptMessages([enriched]);
           setMessages((prev) =>
             prev.some((m) => m.id === decrypted.id) ? prev : [...prev, decrypted]
           );
@@ -240,15 +156,12 @@ export default function ChatPage() {
         "postgres_changes",
         { event: "UPDATE", schema: "public", table: "messages" },
         (payload) => {
-          const updatedMsg = payload.new as Message;
-          if (!updatedMsg) return;
-          
-          // reply_count is NOT encrypted, use directly
+          const updated = payload.new as Message;
+          if (!updated) return;
+          // reply_count is not encrypted — apply directly without a decrypt round-trip
           setMessages((prev) =>
             prev.map((m) =>
-              m.id === updatedMsg.id
-                ? { ...m, reply_count: updatedMsg.reply_count ?? 0 }
-                : m
+              m.id === updated.id ? { ...m, reply_count: updated.reply_count ?? 0 } : m
             )
           );
         }
@@ -257,78 +170,142 @@ export default function ChatPage() {
         "postgres_changes",
         { event: "DELETE", schema: "public", table: "messages" },
         (payload) => {
-          const deletedMsg = payload.old as Message;
-          if (!deletedMsg) return;
-          
-          // Remove from state (trigger already decremented parent's reply_count)
-          setMessages((prev) => prev.filter((m) => m.id !== deletedMsg.id));
+          const deleted = payload.old as Message;
+          if (!deleted) return;
+          setMessages((prev) => prev.filter((m) => m.id !== deleted.id));
         }
       )
       .subscribe();
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [supabase]);
+    return () => { supabase.removeChannel(channel); };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Auto-scroll when messages change
   useEffect(() => {
     if (messagesContainerRef.current) {
       messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
     }
   }, [messages]);
 
+  // -------------------------------------------------------------------------
+  // Actions
+  // -------------------------------------------------------------------------
+  const handleReply = (msgId: string, userName: string) => {
+    const target = messages.find((m) => m.id === msgId);
+    if (!target) return;
+    setReplyToMessage(target);
+    setInput(target.user_id !== customSession?.user?.id ? `@${userName} ` : "");
+  };
+
+  const handleMentionScroll = (userName: string) => {
+    const lastMsg = messages
+      .filter((m) => m.user_name === userName)
+      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0];
+
+    if (!lastMsg) return;
+    setHighlightedMessageId(lastMsg.id);
+
+    const el = document.getElementById(`message-${lastMsg.id}`);
+    if (el && messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTo({
+        top: el.offsetTop - messagesContainerRef.current.offsetTop,
+        behavior: "smooth",
+      });
+    }
+    setTimeout(() => setHighlightedMessageId(null), 2000);
+  };
+
+  const handleSend = async () => {
+    if (!input.trim() || !customSession?.user) return;
+    try {
+      const { encryptedUserName, encryptedText } = await encryptMessage(
+        customSession.user.name || "Anonymous",
+        input.trim()
+      );
+
+      const { data: inserted, error: insertError } = await supabase
+        .from("messages")
+        .insert({
+          user_id: customSession.user.id,
+          user_name: encryptedUserName,
+          text: encryptedText,
+          reply_to_message_id: replyToMessage?.id || null,
+        })
+        .select("*, users:user_id (image, is_author)")
+        .single();
+
+      if (insertError || !inserted) { console.error(insertError); return; }
+
+      // Cache user metadata for the sender (likely already cached but safe to set)
+      if (inserted.users) userCache.current.set(customSession.user.id, inserted.users);
+
+      const [decrypted] = await decryptMessages([inserted]);
+      setMessages((prev) => [...prev, decrypted]);
+      setInput("");
+      setReplyToMessage(null);
+      setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
+    } catch (err) {
+      console.error("Send failed:", err);
+    }
+  };
+
+  const handleDelete = async (messageId: string) => {
+    if (!customSession?.user?.isAuthor) return;
+    const { error } = await supabase.from("messages").delete().eq("id", messageId);
+    if (!error) setMessages((prev) => prev.filter((m) => m.id !== messageId));
+  };
+
+  // -------------------------------------------------------------------------
+  // Derived state
+  // -------------------------------------------------------------------------
   const chattingUsernames = useMemo(() => {
-    const names = messages
-      .map(msg => msg.user_name)
-      .filter(name => name)
-      .filter(name => name !== customSession?.user?.name);
-    return Array.from(new Set(names));
+    const seen = new Set<string>();
+    return messages
+      .map((m) => m.user_name)
+      .filter((n) => n && n !== customSession?.user?.name && !seen.has(n) && seen.add(n) as unknown as boolean);
   }, [messages, customSession?.user?.name]);
+
+  const replyCounts = useMemo(
+    () => Object.fromEntries(messages.map((m) => [m.id, m.reply_count || 0])),
+    [messages]
+  );
 
   return (
     <div className="min-h-screen pl-6 pr-6 md:ml-64 text-white font-inter">
       <ChatHeader customSession={customSession} />
-      
+
       <ChatMessages
         messages={messages}
         customSession={customSession}
         isLoading={isLoading}
-        onDelete={(id) => {
-          setMessageToDelete(id);
-          setShowConfirmModal(true);
-        }}
+        onDelete={(id) => { setMessageToDelete(id); setShowConfirmModal(true); }}
         messagesEndRef={messagesEndRef}
         containerRef={messagesContainerRef}
-        replyCounts={Object.fromEntries(messages.map(m => [m.id, m.reply_count || 0]))}
-        onMentionClick={(userName) => {}}
+        replyCounts={replyCounts}
+        onMentionClick={() => {}}
         highlightedMessageId={highlightedMessageId}
-        onReply={(msgId, userName) => handleReply(msgId, userName)}
+        onReply={handleReply}
       />
-      
+
       {customSession ? (
-        <ChatInput 
+        <ChatInput
           ref={inputRef}
-          input={input} 
-          setInput={setInput} 
-          handleSend={handleSend} 
+          input={input}
+          setInput={setInput}
+          handleSend={handleSend}
           chattingUsernames={chattingUsernames}
-          onUsernameSelect={(name) => {
-            handleMentionScroll(name);
-          }}
+          onUsernameSelect={handleMentionScroll}
           replyToMessage={replyToMessage}
           onClearReply={() => setReplyToMessage(null)}
-          currentUserId={customSession?.user?.id ?? ""} 
+          currentUserId={customSession.user.id}
         />
       ) : (
         <AuthPrompt />
       )}
-      
+
       {showConfirmModal && (
         <ConfirmDeleteModal
-          onCancel={() => {
-            setShowConfirmModal(false);
-            setMessageToDelete(null);
-          }}
+          onCancel={() => { setShowConfirmModal(false); setMessageToDelete(null); }}
           onConfirm={async () => {
             if (messageToDelete) await handleDelete(messageToDelete);
             setShowConfirmModal(false);

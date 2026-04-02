@@ -55,8 +55,14 @@ export default function CertificationCard({
               alt={title + " certificate"}
               className="w-full h-full object-contain bg-white transition-transform duration-300 hover:scale-105"
               onError={(e) => {
-                (e.target as HTMLImageElement).src =
-                  "/placeholder-certificate.png";
+                const target = e.currentTarget;
+                // If we are already trying to load the placeholder and it fails, hide the image to stop the loop.
+                if (target.src.includes("placeholder-certificate.png")) {
+                  target.style.display = "none";
+                } else {
+                  // Otherwise, swap to the placeholder.
+                  target.src = "/placeholder-certificate.png";
+                }
               }}
             />
             {pinned && (
@@ -76,8 +82,10 @@ export default function CertificationCard({
               {org} • {year}
             </p>
 
-
-            <CertificationTags tags={tags} onTagClick={onTagClick} />
+            <CertificationTags 
+              tags={tags ? Array.from(new Set(tags)) : []} 
+              onTagClick={onTagClick} 
+            />
 
             {/* Credential ID */}
             {credentialId && (
