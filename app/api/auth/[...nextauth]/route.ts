@@ -4,7 +4,7 @@ import type {
   SessionStrategy,
   User,
   Account,
-} from "next-auth/core/types";
+} from "next-auth";
 import { JWT } from "next-auth/jwt";
 import GoogleProvider from "next-auth/providers/google";
 import {
